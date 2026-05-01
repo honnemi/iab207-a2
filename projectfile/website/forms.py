@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
+from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, EmailField
 from wtforms.validators import InputRequired, Length, Email, EqualTo
+from wtforms.widgets import EmailInput
 
 # creates the login information
 class LoginForm(FlaskForm):

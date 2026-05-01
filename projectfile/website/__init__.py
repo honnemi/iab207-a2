@@ -21,6 +21,7 @@ def create_app():
 
     Bootstrap5(app)
     
+    """
     # initialise the login manager
     login_manager = LoginManager()
     
@@ -41,5 +42,9 @@ def create_app():
 
     from . import auth
     app.register_blueprint(auth.auth_bp)
+    """
+
+    from . import tickets
+    app.register_blueprint(tickets.tickets_bp)
     
     return app

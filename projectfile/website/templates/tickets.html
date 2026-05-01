@@ -3,43 +3,55 @@
 {% block content %}
 
 <div class="container mt-4">
-    <h1>Select Your Tickets</h1>
+    <h1 class="mb-4">Select Your Tickets</h1>
 
-    <div class="row">
-        <div class="col-8">
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="row g-4">
+        <div class="col-12 col-md-8">
+            <ul class="list-group rounded shadow-sm">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="ms-2 me-auto">General</span>
-                    <span>$15</span>
-                    <button type="button" class="btn">-</button>
-                    <span>1</span>
-                    <button type="button" class="btn">+</button>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-semibold me-2">$15</span>
+                        <button type="button" class="btn btn-primary" style="width: 40px;">-</button>
+                        <span class="mx-1">1</span>
+                        <button type="button" class="btn btn-primary" style="width: 40px;">+</button>
+                    </div>
                 </li>
-                <li class="list-group-item d-flex justify-content-between align-items-start">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span class="ms-2 me-auto">Student</span>
-                    <span>$10</span>
-                    <button type="button" class="btn">-</button>
-                    <span>0</span>
-                    <button type="button" class="btn">+</button>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-semibold me-2">$10</span>
+                        <button type="button" class="btn btn-primary" style="width: 40px;">-</button>
+                        <span class="mx-1">0</span>
+                        <button type="button" class="btn btn-primary" style="width: 40px;">+</button>
+                    </div>
                 </li>
             </ul>
         </div>
 
-        <div class="col-4">
-            <div class="card text-center">
-                <div class="card-header">
+        <div class="col-12 col-md-4">
+            <div class="card text-center shadow-sm">
+                <div class="card-header fw-semibold">
                     Booking Summary
                 </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <span class="ms-2 me-auto">1x General</span>
-                            <span>$15</span>
+
+                <div class="card-body p-4">
+
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center mb-2 rounded">
+                            <span>1x General</span>
+                            <span class="fw-semibold">$15</span>
                         </li>
                     </ul>
-                    <h5 class="card-title">Total Price</h5>
-                    <p class="card-text">$15.00</p>
-                    <a href="#" class="btn btn-primary">Proceed To Checkout</a>
+
+                    <h5 class="card-title mt-3">Total Price</h5>
+                    <p class="card-text fs-4 fw-bold mb-3">$15.00</p>
+
+                    <a href="{{url_for('tickets.show_checkout')}}" class="btn btn-primary w-100 mt-2">
+                        Proceed To Checkout
+                    </a>
                 </div>
             </div>
         </div>
