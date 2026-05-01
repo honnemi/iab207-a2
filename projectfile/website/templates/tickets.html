@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h1>Select Your Tickets</h1>
+
+    <div class="row">
+        <div class="col-8">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <span class="ms-2 me-auto">General</span>
+                    <span>$15</span>
+                    <button type="button" class="btn">-</button>
+                    <span>1</span>
+                    <button type="button" class="btn">+</button>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <span class="ms-2 me-auto">Student</span>
+                    <span>$10</span>
+                    <button type="button" class="btn">-</button>
+                    <span>0</span>
+                    <button type="button" class="btn">+</button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-4">
+            <div class="card text-center">
+                <div class="card-header">
+                    Booking Summary
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <span class="ms-2 me-auto">1x General</span>
+                            <span>$15</span>
+                        </li>
+                    </ul>
+                    <h5 class="card-title">Total Price</h5>
+                    <p class="card-text">$15.00</p>
+                    <a href="#" class="btn btn-primary">Proceed To Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
