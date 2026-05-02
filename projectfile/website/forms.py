@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, EmailField
+from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
 from wtforms.validators import InputRequired, Length, Email, EqualTo
 from wtforms.widgets import EmailInput
 
@@ -20,3 +20,10 @@ class RegisterForm(FlaskForm):
 
     # submit button
     submit = SubmitField("Register")
+
+class CheckoutForm(FlaskForm):
+    card_number = StringField('Card Number', render_kw={"placeholder": "Enter 16-digit card number"}, validators=[InputRequired(), Length(min=16, max=16)])
+    expiry = StringField('Expiry', render_kw={"placeholder": "MM/YY"}, validators=[InputRequired(), Length(min=5, max=5)])
+    cvv = StringField('CVV', render_kw={"placeholder": "Enter 3 or 4-digit security code"}, validators=[InputRequired(), Length(min=3, max=4)])
+    submit = SubmitField('Complete Payment')
+    # Still need to add proper validation for all fields
