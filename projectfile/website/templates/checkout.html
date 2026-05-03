@@ -17,16 +17,25 @@
                 <div class="mb-3">
                     {{ form.card_number.label(class="form-label") }}
                     {{ form.card_number(class="form-control") }}
+                    {% for error in form.card_number.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="mb-3">
                     {{ form.expiry.label(class="form-label") }}
                     {{ form.expiry(class="form-control") }}
+                    {% for error in form.expiry.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 <div class="mb-3">
                     {{ form.cvv.label(class="form-label") }}
                     {{ form.cvv(class="form-control") }}
+                    {% for error in form.cvv.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                    {% endfor %}
                 </div>
 
                 {{ form.submit(class="btn btn-primary") }}

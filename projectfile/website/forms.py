@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField
-from wtforms.validators import InputRequired, Length, Email, EqualTo
+from wtforms.validators import InputRequired, Length, Email, EqualTo, Regexp
 from wtforms.widgets import EmailInput
 
 # creates the login information
@@ -22,8 +22,7 @@ class RegisterForm(FlaskForm):
     submit = SubmitField("Register")
 
 class CheckoutForm(FlaskForm):
-    card_number = StringField('Card Number', render_kw={"placeholder": "Enter 16-digit card number"}, validators=[InputRequired(), Length(min=16, max=16)])
-    expiry = StringField('Expiry', render_kw={"placeholder": "MM/YY"}, validators=[InputRequired(), Length(min=5, max=5)])
-    cvv = StringField('CVV', render_kw={"placeholder": "Enter 3 or 4-digit security code"}, validators=[InputRequired(), Length(min=3, max=4)])
+    card_number = StringField('Card Number', render_kw={"placeholder": "Enter 16-digit card number"}, validators=[InputRequired(), Regexp(r'^\d{16}$', message="Card number must be 16 digits")])
+    expiry = StringField('Expiry', render_kw={"placeholder": "MM/YY"}, validators=[InputRequired(), Regexp(r'^(0[1-9]|1[0-2])\/\d{2}$', message="Format must be MM/YY")])
+    cvv = StringField('CVV', render_kw={"placeholder": "Enter 3 or 4-digit security code"}, validators=[InputRequired(), Regexp(r'^\d{3,4}$', message="CVV must be 3 or 4 digits")])
     submit = SubmitField('Complete Payment')
-    # Still need to add proper validation for all fields
