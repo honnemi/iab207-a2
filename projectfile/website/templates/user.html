@@ -1,21 +1,30 @@
-{% include "base.html" %}
+{% extends "base.html" %} 
 {% from "bootstrap5/form.html" import render_form %}
-{% block body %}
+{% block content %}
 
-<div class="page-header">
-    <h4>{{heading}}</h4>
-</div>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card shadow-sm p-4">
+        <h4 class="text-center mb-4">{{heading}}</h4>
+        {{render_form(form)}}
 
-<!-- Form rendering is simple and easy if using WTForms and Bootstrap -->
-<div class="col-md-6">
-    {{render_form(form)}}
-</div>
+        <!-- Form rendering is simple and easy if using WTForms and Bootstrap -->
 
-<!-- When you have Login form, then show the user a link to register -->
-{% if heading == 'Login' %}
-<div class="col-md-4">
-    <p>New user? <a href="{{url_for('register')}}">Click here</a> to register.</p>
+        <!-- When you have Login form, then show the user a link to register -->
+        {% if heading == 'Login' %}
+        <div class="text-center mt-3">
+          <p class="mb-0">New user? <a href="{{url_for('main.register_testing')}}">Click here</a> to register.</p>
+        </div>
+        {% endif %}
+        {% if heading == 'Register' %}
+        <div class="text-center mt-3">
+          <p class="mb-0">Already have an account? <a href="{{url_for('main.login_testing')}}">Login here</a></p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
-{% endif %}
 
 {% endblock %}
