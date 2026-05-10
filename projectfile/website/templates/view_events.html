@@ -1,252 +1,96 @@
 {% extends "base.html" %}
 {% block content %}
 
-<style>
-  .cinema-page {
-    background: #0a0a0f;
-    min-height: 100vh;
-    padding: 2.5rem 1rem;
-    font-family: 'Segoe UI', system-ui, sans-serif;
-  }
-  .page-header {
-    max-width: 900px;
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .page-header h2 {
-    font-size: 22px;
-    font-weight: 500;
-    color: #e8e8f0;
-    margin: 0;
-  }
-  .btn-create {
-    background: #e5383b;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .btn-create:hover { background: #cc2d30; color: #fff; }
+<div class="container mt-5">
 
-  /* Genre filter pills */
-  .filter-bar {
-    max-width: 900px;
-    margin: 0 auto 1.75rem;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .filter-pill {
-    background: transparent;
-    border: 0.5px solid rgba(255,255,255,0.12);
-    color: #8888a8;
-    border-radius: 20px;
-    padding: 5px 14px;
-    font-size: 12px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .filter-pill:hover, .filter-pill.active {
-    background: rgba(229,56,59,0.15);
-    border-color: rgba(229,56,59,0.4);
-    color: #e5383b;
-  }
-
-  /* Event grid */
-  .events-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-  .event-card {
-    background: #13131c;
-    border: 0.5px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: border-color 0.2s, transform 0.15s;
-    display: flex;
-    flex-direction: column;
-  }
-  .event-card:hover {
-    border-color: rgba(229,56,59,0.35);
-    transform: translateY(-2px);
-  }
-  .card-poster {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    display: block;
-    background: #1a1a28;
-  }
-  .card-poster-placeholder {
-    width: 100%;
-    height: 160px;
-    background: linear-gradient(135deg, #1a1a28 0%, #0d0d1a 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-  }
-  .card-body {
-    padding: 14px 16px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: #e8e8f0;
-    margin: 0 0 5px;
-  }
-  .card-meta {
-    font-size: 12px;
-    color: #66667a;
-    margin: 0 0 10px;
-    line-height: 1.5;
-  }
-  .card-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
-  .tag-genre {
-    background: rgba(229,56,59,0.12);
-    border: 0.5px solid rgba(229,56,59,0.25);
-    color: #e5383b;
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 20px;
-  }
-  .tag-rating {
-    background: rgba(255,255,255,0.05);
-    border: 0.5px solid rgba(255,255,255,0.1);
-    color: #8888a8;
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 20px;
-  }
-  .card-price-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    margin-top: auto;
-  }
-  .card-price {
-    font-size: 15px;
-    font-weight: 500;
-    color: #e8e8f0;
-  }
-  .card-tickets {
-    font-size: 11px;
-    color: #66667a;
-  }
-  .card-tickets.low { color: #e5a83b; }
-  .btn-details {
-    display: block;
-    background: transparent;
-    border: 0.5px solid rgba(229,56,59,0.35);
-    color: #e5383b;
-    border-radius: 8px;
-    padding: 8px;
-    text-align: center;
-    font-size: 13px;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .btn-details:hover {
-    background: rgba(229,56,59,0.1);
-    color: #e5383b;
-  }
-
-  /* Empty state */
-  .empty-state {
-    max-width: 900px;
-    margin: 4rem auto;
-    text-align: center;
-    color: #44445a;
-  }
-  .empty-state p { font-size: 15px; margin-bottom: 1rem; }
-</style>
-
-<div class="cinema-page">
-
-  <div class="page-header">
-    <h2>All events</h2>
-    <a href="{{ url_for('main.create_event') }}" class="btn-create">+ Create event</a>
-  </div>
-
-  <!-- Genre filter bar -->
-  <div class="filter-bar">
-    <a href="{{ url_for('main.view_events') }}"
-       class="filter-pill {% if not request.args.get('genre') %}active{% endif %}">All</a>
-    {% for g in ['Action','Comedy','Drama','Horror','Sci-Fi','Fantasy','Romance','Thriller','Animated'] %}
-    <a href="{{ url_for('main.view_events', genre=g) }}"
-       class="filter-pill {% if request.args.get('genre') == g %}active{% endif %}">{{ g }}</a>
-    {% endfor %}
-  </div>
-
-  <!-- Events grid -->
-  {% if events %}
-  <div class="events-grid">
-    {% for event in events %}
-    <div class="event-card">
-
-      {% if event.image %}
-        <img class="card-poster" src="{{ event.image }}" alt="{{ event.title }}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div class="card-poster-placeholder" style="display:none;">🎬</div>
-      {% else %}
-        <div class="card-poster-placeholder">🎬</div>
-      {% endif %}
-
-      <div class="card-body">
-        <h5 class="card-title">{{ event.title }}</h5>
-        <p class="card-meta">
-          📍 {{ event.location }}<br>
-          🗓 {{ event.date.strftime('%a %d %b, %-I:%M %p') if event.date else 'TBC' }}
-        </p>
-
-        <div class="card-tags">
-          {% if event.genre %}<span class="tag-genre">{{ event.genre }}</span>{% endif %}
-          {% if event.rating %}<span class="tag-rating">{{ event.rating }}</span>{% endif %}
-        </div>
-
-        <div class="card-price-row">
-          <span class="card-price">
-            {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
-          </span>
-          <span class="card-tickets {% if event.tickets_available and event.tickets_available < 10 %}low{% endif %}">
-            {% if event.tickets_available %}{{ event.tickets_available }} left{% endif %}
-          </span>
-        </div>
-
-        <a href="{{ url_for('main.event_detail', event_id=event.id) }}" class="btn-details">
-          View details
-        </a>
-      </div>
+    <!-- Page header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">All Events</h2>
+        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">+ Create Event</a>
     </div>
-    {% endfor %}
-  </div>
 
-  {% else %}
-  <div class="empty-state">
-    <p>No events found{% if request.args.get('genre') %} for <strong>{{ request.args.get('genre') }}</strong>{% endif %}.</p>
-    <a href="{{ url_for('main.create_event') }}" class="btn-create">Be the first to create one</a>
-  </div>
-  {% endif %}
+    <!-- Genre filter -->
+    <div class="mb-4">
+        <a href="{{ url_for('main.view_events') }}"
+           class="btn btn-sm {% if not request.args.get('genre') %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
+            All
+        </a>
+        {% for g in ['Action','Comedy','Drama','Horror','Sci-Fi','Fantasy','Romance','Thriller','Animated'] %}
+        <a href="{{ url_for('main.view_events', genre=g) }}"
+           class="btn btn-sm {% if request.args.get('genre') == g %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
+            {{ g }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Events grid -->
+    {% if events %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for event in events %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+
+                <!-- Poster -->
+                {% if event.image %}
+                <img src="{{ event.image }}" class="card-img-top" alt="{{ event.title }}"
+                     style="height: 180px; object-fit: cover;"
+                     onerror="this.style.display='none'">
+                {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center"
+                     style="height: 180px; font-size: 48px;">🎬</div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ event.title }}</h5>
+
+                    <p class="card-text text-muted small mb-2">
+                        📍 {{ event.location }}<br>
+                        🗓 {{ event.date.strftime('%a %d %b, %-I:%M %p') if event.date else 'Date TBC' }}
+                    </p>
+
+                    <!-- Genre & rating badges -->
+                    <div class="mb-3">
+                        {% if event.genre %}
+                        <span class="badge bg-primary me-1">{{ event.genre }}</span>
+                        {% endif %}
+                        {% if event.rating %}
+                        <span class="badge bg-secondary">{{ event.rating }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Price & availability -->
+                    <div class="d-flex justify-content-between align-items-center mt-auto mb-3">
+                        <span class="fw-semibold">
+                            {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
+                        </span>
+                        <span class="text-muted small">
+                            {% if event.tickets_available %}
+                                {% if event.tickets_available < 10 %}
+                                <span class="text-warning fw-semibold">{{ event.tickets_available }} left</span>
+                                {% else %}
+                                {{ event.tickets_available }} tickets left
+                                {% endif %}
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <a href="{{ url_for('main.event_detail', event_id=event.id) }}"
+                       class="btn btn-outline-primary w-100">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- Empty state -->
+    <div class="text-center py-5">
+        <p class="text-muted fs-5">
+            No events found{% if request.args.get('genre') %} for <strong>{{ request.args.get('genre') }}</strong>{% endif %}.
+        </p>
+        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">Create the first one</a>
+    </div>
+    {% endif %}
 
 </div>
 
