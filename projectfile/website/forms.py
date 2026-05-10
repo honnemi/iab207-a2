@@ -26,3 +26,9 @@ class CheckoutForm(FlaskForm):
     expiry = StringField('Expiry', render_kw={"placeholder": "MM/YY"}, validators=[InputRequired(), Regexp(r'^(0[1-9]|1[0-2])\/\d{2}$', message="Format must be MM/YY")])
     cvv = StringField('CVV', render_kw={"placeholder": "Enter 3 or 4-digit security code"}, validators=[InputRequired(), Regexp(r'^\d{3,4}$', message="CVV must be 3 or 4 digits")])
     submit = SubmitField('Complete Payment')
+
+class EventForm(FlaskForm):
+    title = StringField("Event Title", validators=[InputRequired(), Length(min=2, max=150)])
+    descripttion = TextAreaField("Description", validators=[InputRequired()])
+    location = StringField("Location", validators=[InputRequired()])
+    submit = SubmitField("Create Event")

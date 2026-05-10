@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body">
+            <h2>{{ event.title }}</h2>
+
+            <p><strong>Location:</strong> {{ event.location }}</p>
+
+            <hr>
+
+            <p>{{ event.description }}</p>
+
+            <a href="{{ url_for('main.view_events') }}" class="btn btn-secondary">
+                Back to Events
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
