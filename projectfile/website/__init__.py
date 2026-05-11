@@ -47,7 +47,9 @@ def create_app():
     """
     from . import views
     app.register_blueprint(views.main_bp)
-
+    with app.app_context():
+        db.create_all()
+        
     from . import tickets
     app.register_blueprint(tickets.tickets_bp)
     
