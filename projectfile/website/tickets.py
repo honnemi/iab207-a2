@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, url_for, redirect
 from flask_bootstrap import Bootstrap5
 from .forms import CheckoutForm
+from . models import Event, Comment
 
 tickets_bp = Blueprint('tickets', __name__)
 

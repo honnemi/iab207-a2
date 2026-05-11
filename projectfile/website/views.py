@@ -6,7 +6,7 @@ from datetime import datetime
 
 main_bp = Blueprint('main', __name__)
 
-@main_bp.route('/')
+@main_bp.route('/index')
 def index():
     return '<h1>Starter code for assignment 3<h1>'
 
@@ -50,7 +50,7 @@ def create_event():
  
     return render_template('events.html', form=form)
 
-@main_bp.route('/events')
+@main_bp.route('/')
 def view_events():
     genre_filter = request.args.get('genre')
  
@@ -67,3 +67,15 @@ def event_detail(event_id):
     comment_form = CommentForm()
     return render_template('event_detail.html', event=event, comment_form=comment_form)
 
+@main_bp.route('/events/<int:event_id>/comment', methods=['POST'])
+def add_comment(event_id):
+    event = Event.query.get_or_404(event_id)
+    text = request.form.get('text', '').strip()
+    if text:
+        comment = comment(text=text, event_id=event.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment posted!')
+    else:
+        flash('Comment cannot be empty.')
+    return redirect(url_for('main.event_detail', event_id=event_id))
