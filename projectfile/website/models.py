@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)
 
     comments = db.relationship('Comment', backref='user', lazy=True)
-    orders = db.relationship('Order', backref='user', lazy=True)
+    orders = db.relationship('Booking', backref='user', lazy=True)
 
 
 class Event(db.Model):
@@ -28,7 +28,7 @@ class Event(db.Model):
     image = db.Column(db.String(255))
 
     comments = db.relationship('Comment', backref='event', lazy=True)
-    orders = db.relationship('Order', backref='event', lazy=True)
+    orders = db.relationship('Booking', backref='event', lazy=True)
 
 
 class Comment(db.Model):
