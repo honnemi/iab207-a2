@@ -1,4 +1,3 @@
-# import flask - from 'package' import 'Class'
 from flask import Flask 
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
@@ -6,21 +5,21 @@ from flask_login import LoginManager
 
 db = SQLAlchemy()
 
-# create a function that creates a web application
-# a web server will run this web application
 def create_app():
-  
-    app = Flask(__name__)  # this is the name of the module/package that is calling this app
-    # Should be set to false in a production environment
+
+    app = Flask(__name__)
     app.debug = True
     app.secret_key = 'somesecretkey'
-    # set the app configuration data 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sitedata.sqlite'
-    # initialise db with flask app
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sitedata.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
     db.init_app(app)
 
     Bootstrap5(app)
-    
+
+    from . import models
+
     """
     # initialise the login manager
     login_manager = LoginManager()
@@ -45,15 +44,11 @@ def create_app():
     from . import auth
     app.register_blueprint(auth.auth_bp)
     """
-    from . import views
-    app.register_blueprint(views.main_bp)
-    with app.app_context():
-        db.create_all()
-        
-    from . import tickets
-    app.register_blueprint(tickets.tickets_bp)
 
-    from . import bookings
+    from . import views, tickets, bookings
+    app.register_blueprint(views.main_bp)
+    app.register_blueprint(tickets.tickets_bp)
     app.register_blueprint(bookings.bookings_bp)
-    
+
     return app
+

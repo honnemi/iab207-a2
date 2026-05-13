@@ -40,8 +40,8 @@ class Comment(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
 
 
-class Order(db.Model):
-    __tablename__ = 'order'
+class Booking(db.Model):
+    __tablename__ = 'booking'
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
