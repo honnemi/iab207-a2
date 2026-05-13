@@ -1,14 +1,21 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from . forms import LoginForm, RegisterForm, EventForm, CommentForm
-from . models import Event
+from . models import Event, Booking
 from . import db
 from datetime import datetime 
 
 main_bp = Blueprint('main', __name__)
 
-@main_bp.route('/index')
-def index():
-    return '<h1>Starter code for assignment 3<h1>'
+@main_bp.route('/')
+def view_events():
+    genre_filter = request.args.get('genre')
+ 
+    if genre_filter:
+        events = Event.query.filter_by(genre=genre_filter).all()
+    else:
+        events = Event.query.all()
+ 
+    return render_template('view_events.html', events=events)
 
 @main_bp.route('/login_testing')
 def login_testing():
@@ -50,22 +57,56 @@ def create_event():
  
     return render_template('events.html', form=form)
 
-@main_bp.route('/')
-def view_events():
-    genre_filter = request.args.get('genre')
- 
-    if genre_filter:
-        events = Event.query.filter_by(genre=genre_filter).all()
-    else:
-        events = Event.query.all()
- 
-    return render_template('view_events.html', events=events)
-
-@main_bp.route('/events/<int:event_id>')
+@main_bp.route('/events/<int:event_id>', methods=['GET', 'POST'])
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     comment_form = CommentForm()
-    return render_template('event_detail.html', event=event, comment_form=comment_form)
+
+    # Code to make ticket modal responsive and add booking to database on confirmation
+    if "cart" not in session:
+        session["cart"] = {}
+
+    cart = session["cart"]
+    key = str(event_id)
+    cart.setdefault(key, 1)
+
+    if request.method == "POST":
+
+        action = request.form.get("action")
+        qty = cart[key]
+
+        if action == "increase":
+            if qty < event.tickets_available:
+                qty += 1
+
+        elif action == "decrease":
+            if qty > 1:
+                qty -= 1
+
+        elif action == "checkout":
+            booking = Booking(
+                created_at=datetime.now(),
+                user_id=1,  # replace later with current_user.id
+                event_id=event.id,
+                quantity=qty
+            )
+            db.session.add(booking)
+
+            event.tickets_available -= qty
+            db.session.commit()
+
+            session.pop("cart", None)
+
+            return redirect(url_for("events.event_details", event_id=event_id))
+
+        cart[key] = qty
+        session["cart"] = cart
+
+        return redirect(url_for("events.event_details", event_id=event_id))
+
+    quantity = cart[key]
+
+    return render_template('event_detail.html', event=event, comment_form=comment_form, quantity=quantity)
 
 @main_bp.route('/events/<int:event_id>/comment', methods=['POST'])
 def add_comment(event_id):
