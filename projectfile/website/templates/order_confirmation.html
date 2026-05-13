@@ -28,15 +28,18 @@
                     <ul class="list-group list-group-flush">
                         <!--Will add for statement here when ticket db is created-->
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>General</span>
+                            <span>1x General</span>
                             <span>$15</span>
                         </li>
                     </ul>
                 </div>
             </div>
             <h4 class="mt-4">Thank you for your purchase!</h4>
-            <a href="#" class="btn btn-primary mt-3">
+            <a href="{{url_for('main.view_events')}}" class="btn btn-primary mt-3 me-2">
                 Return To Homepage
+            </a>
+            <a href="{{url_for('bookings.show_bookings')}}" class="btn btn-primary mt-3">
+                View Booking History
             </a>
         </div>
     </div>

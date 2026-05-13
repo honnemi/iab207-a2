@@ -10,23 +10,27 @@
             <ul class="list-group rounded shadow-sm">
                 <!--Will add for statement here when ticket db is created-->
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="ms-2 me-auto">General</span>
+
+                    <div class="ms-2 me-auto">
+                        <div>General</div>
+
+                        <small class="text-success">
+                            42 tickets remaining
+                        </small>
+                    </div>
 
                     <div class="d-flex align-items-center gap-2">
                         <span class="fw-semibold me-2">$15</span>
-                        <button type="button" class="btn btn-primary" style="width: 40px;">-</button>
-                        <span class="mx-1">1</span>
-                        <button type="button" class="btn btn-primary" style="width: 40px;">+</button>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <span class="ms-2 me-auto">Student</span>
 
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fw-semibold me-2">$10</span>
-                        <button type="button" class="btn btn-primary" style="width: 40px;">-</button>
-                        <span class="mx-1">0</span>
-                        <button type="button" class="btn btn-primary" style="width: 40px;">+</button>
+                        <button type="button" class="btn btn-primary" style="width: 40px;">
+                            -
+                        </button>
+
+                        <span class="mx-1">1</span>
+
+                        <button type="button" class="btn btn-primary" style="width: 40px;">
+                            +
+                        </button>
                     </div>
                 </li>
             </ul>
@@ -50,7 +54,7 @@
                     <h5 class="card-title mt-3">Total Price</h5>
                     <p class="card-text fs-4 fw-bold mb-3">$15.00</p>
 
-                    <a href="{{url_for('tickets.show_checkout')}}" class="btn btn-primary w-100 mt-2">
+                    <a href="{{url_for('tickets.show_confirmation')}}" class="btn btn-primary w-100 mt-2">
                         Proceed To Checkout
                     </a>
                 </div>
