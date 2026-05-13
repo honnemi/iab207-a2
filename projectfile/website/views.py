@@ -102,11 +102,15 @@ def event_detail(event_id):
         cart[key] = qty
         session["cart"] = cart
 
-        return redirect(url_for("events.event_details", event_id=event_id))
+        return redirect(url_for("main.order_confirmation"))
 
     quantity = cart[key]
 
     return render_template('event_detail.html', event=event, comment_form=comment_form, quantity=quantity)
+
+@main_bp.route('/order/confirmation')
+def order_confirmation():
+    return render_template('order_confirmation.html')
 
 @main_bp.route('/events/<int:event_id>/comment', methods=['POST'])
 def add_comment(event_id):
