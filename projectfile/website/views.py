@@ -97,7 +97,7 @@ def event_detail(event_id):
 
             session.pop("cart", None)
 
-            return redirect(url_for("events.event_details", event_id=event_id))
+            return redirect(url_for("main.event_detail", event_id=event_id))
 
         cart[key] = qty
         session["cart"] = cart
