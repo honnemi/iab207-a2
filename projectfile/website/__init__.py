@@ -47,7 +47,6 @@ def create_app():
 
     from . import views, bookings
     app.register_blueprint(views.main_bp)
-   #  app.register_blueprint(tickets.tickets_bp)
     app.register_blueprint(bookings.bookings_bp)
 
     return app

@@ -45,7 +45,7 @@
 
                     <p class="card-text text-muted small mb-2">
                         📍 {{ event.location }}<br>
-                        🗓 {{ event.date.strftime('%a %d %b, %-I:%M %p') if event.date else 'Date TBC' }}
+                        🗓 {{ event.date.strftime('%a %d %b, %#I:%M %p') if event.date else 'Date TBC' }}
                     </p>
 
                     <!-- Genre & rating badges -->
