@@ -16,14 +16,15 @@
 
                 <div class="card-body">
                     <h5 class="card-title mb-3">
-                        {{ event.title }}
+                        {{ booking.event.title }}
                     </h5>
                     <p class="mb-1">
                         <strong>Order ID:</strong> ORD#{{ "%04d"|format(booking.id) }}
                     </p>
-                    <p class="mb-1"><strong>Customer:</strong> {{ user.name }}</p>
+                    <p class="mb-1"><strong>Customer:</strong> {{ booking.user.name }}</p>
+                    <p class="mb-1"><strong>Date placed:</strong> {{ booking.created_at.strftime('%d/%m/%Y %I:%M %p') }}</p>
                     <p class="mb-1"><strong>Tickets:</strong> {{ booking.quantity }}</p>
-                    <p class="mb-1"><strong>Total:</strong> ${{ booking.quantity * event.ticket_price }}</p>
+                    <p class="mb-1"><strong>Total:</strong> ${{ "%.2f"|format(booking.quantity * booking.event.ticket_price) }}</p>
                 </div>
             </div>
             <h4 class="mt-4">Thank you for your purchase!</h4>
