@@ -30,7 +30,7 @@
             <h2 class="mb-1">{{ event.title }}</h2>
             <p class="text-muted mb-3">
                 📍 {{ event.location }} &nbsp;·&nbsp;
-                🗓 {{ event.date.strftime('%A %d %B %Y, %-I:%M %p') if event.date else 'Date TBC' }}
+                🗓 {{ event.date.strftime('%a %d %b, %I:%M %p').lstrip('0') if event.date else 'Date TBC' }}
             </p>
 
             <!-- Badges -->
@@ -54,7 +54,8 @@
                 <div class="col-6 col-md-3">
                     <div class="border rounded p-2 text-center">
                         <div class="text-muted small">Time</div>
-                        <div class="fw-semibold small">{{ event.date.strftime('%-I:%M %p') if event.date else 'TBC' }}</div>
+                        <div class="fw-semibold small" {{ event.date.strftime('%I:%M %p').lstrip('0') if event.date else 'TBC' }}>
+                        </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -83,57 +84,49 @@
                         </div>
                         <div class="text-end">
                             {% if event.tickets_available and event.tickets_available > 0 %}
-                                {% if event.tickets_available < 10 %}
-                                <span class="text-warning fw-semibold">⚠ Only {{ event.tickets_available }} left!</span>
-                                {% else %}
-                                <span class="text-muted">{{ event.tickets_available }} tickets available</span>
-                                {% endif %}
+                            {% if event.tickets_available < 10 %}
+                            <span class="text-warning fw-semibold">⚠ Only {{ event.tickets_available }} left!</span>
                             {% else %}
-                                <span class="text-danger fw-semibold">Sold out</span>
+                            <span class="text-muted">{{ event.tickets_available }} tickets available</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-danger fw-semibold">Sold out</span>
                             {% endif %}
                         </div>
                     </div>
 
                     {% if event.tickets_available and event.tickets_available > 0 %}
                     <!-- Quantity selector -->
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="input-group" style="width: 130px;">
-                            <button class="btn btn-outline-secondary" type="button" onclick="changeQty(-1)">−</button>
-                            <input type="text" class="form-control text-center" id="qty" value="1" readonly>
-                            <button class="btn btn-outline-secondary" type="button" onclick="changeQty(1)">+</button>
+                    <form method="POST">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="input-group" style="width: 130px;">
+                                <button class="btn btn-outline-secondary" type="submit" name="action" value="decrease">−</button>
+                                <input type="text" class="form-control text-center" value="{{ quantity }}" readonly>
+                                <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">+</button>
+                            </div>
+                            <span class="text-muted">
+                                Total: <strong id="total">
+                                    {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
+                                </strong>
+                            </span>
                         </div>
-                        <span class="text-muted">
-                            Total: <strong id="total">
-                                {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
-                            </strong>
-                        </span>
-                    </div>
-                    <div>
-                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#ticketModal">
-                            Select Tickets
-                        </button>
-                    </div>
+                        <div>
+                            <button class="btn btn-primary btn-lg" name="action" value="checkout">
+                                Buy Tickets
+                            </button>
+                        </div>
 
-                    <script>
-                        var price = {{ (event.ticket_price | float) if event.ticket_price else 0 }};
-                        var max = {{ event.tickets_available if event.tickets_available else 0 }};
-                        var qty = 1;
-                        function changeQty(delta) {
-                            qty = Math.max(1, Math.min(max, qty + delta));
-                            document.getElementById('qty').value = qty;
-                            document.getElementById('total').textContent = price === 0 ? 'Free' : '$' + (qty * price).toFixed(2);
-                        }
-                    </script>
-
-                    {% else %}
-                    <div class="d-grid">
-                        <button class="btn btn-secondary btn-lg" disabled>Sold Out</button>
-                    </div>
-                    {% endif %}
+                        {% else %}
+                        <div class="d-grid">
+                            <button class="btn btn-secondary btn-lg" disabled>Sold Out</button>
+                        </div>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    
 
     <!-- Description -->
     <div class="row mt-2">
@@ -155,16 +148,16 @@
                     <h5 class="card-title mb-4">Comments</h5>
 
                     {% if event.comments %}
-                        {% for comment in event.comments %}
-                        <div class="border-bottom pb-3 mb-3">
-                            <div class="fw-semibold small mb-1">
-                                {{ comment.user.name if comment.user else 'Anonymous' }}
-                            </div>
-                            <p class="text-muted small mb-0">{{ comment.text }}</p>
+                    {% for comment in event.comments %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="fw-semibold small mb-1">
+                            {{ comment.user.name if comment.user else 'Anonymous' }}
                         </div>
-                        {% endfor %}
+                        <p class="text-muted small mb-0">{{ comment.text }}</p>
+                    </div>
+                    {% endfor %}
                     {% else %}
-                        <p class="text-muted small">No comments yet. Be the first!</p>
+                    <p class="text-muted small">No comments yet. Be the first!</p>
                     {% endif %}
 
                     <!-- Add comment -->
@@ -177,74 +170,6 @@
                         <button type="submit" class="btn btn-outline-primary btn-sm">Post Comment</button>
                     </form>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Ticket pop-up window-->
-<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Header -->
-            <div class="modal-header">
-                <h5 class="modal-title">Select Your Tickets</h5>
-
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Body -->
-            <div class="modal-body">
-                <div class="row g-4">
-                    <div class="col-md-8">
-                        <div class="list-group">
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div>{{ event.title }}</div>
-                                    <small>{{ event.tickets_available }} tickets remaining</small>
-                                    <h5>${{ event.ticket_price }}</h5>
-                                </div>
-
-                                <div class="d-flex align-items-center gap-2">
-                                    <!--Decrease quantity button-->
-                                    <button class="btn btn-outline-primary btn-sm" type="button">
-                                        -
-                                    </button>
-
-                                    <!--Chosen quantity-->
-                                    <span>1</span>
-                                    
-                                    <!--Increase quantity button-->
-                                    <button class="btn btn-outline-primary btn-sm" type="button">
-                                        +
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-header">
-                                Summary
-                            </div>
-                            <div class="card-body">
-                                <p class="mb-1">{{quantity}}x {{event.title}}</p>
-                                <h5>{{quantity * event.ticket_price}}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-                <a href="{{ url_for('tickets.show_confirmation') }}" class="btn btn-primary">
-                    Confirm Selection
-                </a>
             </div>
         </div>
     </div>
