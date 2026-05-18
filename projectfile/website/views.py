@@ -62,7 +62,7 @@ def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     comment_form = CommentForm()
 
-    # Code to make ticket modal responsive and add booking to database on confirmation
+    # Code to make ticket selection responsive and add booking to database on confirmation
     if "cart" not in session:
         session["cart"] = {}
 
@@ -86,13 +86,13 @@ def event_detail(event_id):
         elif action == "checkout":
             booking = Booking(
                 created_at=datetime.now(),
-                user_id=1,  # replace later with current_user.id
+                user_id=1, # replace later with current_user.id
                 event_id=event.id,
                 quantity=qty
             )
             db.session.add(booking)
 
-            event.tickets_available -= qty
+            event.tickets_available -= qty # update tickets available for event
             db.session.commit()
 
             session.pop("cart", None)

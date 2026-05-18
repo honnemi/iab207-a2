@@ -105,8 +105,8 @@
                                 <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">+</button>
                             </div>
                             <span class="text-muted">
-                                Total: <strong id="total">
-                                    {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
+                                Total: <strong>
+                                    {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price * quantity) }}{% else %}Free{% endif %}
                                 </strong>
                             </span>
                         </div>
