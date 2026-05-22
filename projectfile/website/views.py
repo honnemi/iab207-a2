@@ -9,13 +9,21 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def view_events():
     genre_filter = request.args.get('genre')
- 
+    search_query = request.args.get('q', '').strip()
+    query = Event.query
     if genre_filter:
-        events = Event.query.filter_by(genre=genre_filter).all()
-    else:
-        events = Event.query.all()
- 
-    return render_template('view_events.html', events=events)
+        query = query.filter_by(genre=genre_filter)
+    if search_query:
+        like = f'%{search_query}%'
+        query = query.filter(
+            db.or_(
+                Event.title.ilike(like),
+                Event.description.ilike(like),
+                Event.location.ilike(like),
+            )
+        )
+    events = query.all()
+    return render_template('view_events.html', events=events, search_query=search_query)
 
 @main_bp.route('/login_testing')
 def login_testing():

@@ -8,7 +8,22 @@
         <h2 class="mb-0">All Events</h2>
         <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">+ Create Event</a>
     </div>
-
+    <!-- Search Bar -->
+    <form method="GET" action="{{ url_for('main.view_events') }}" class="mb-3">
+    {% if request.args.get('genre') %}
+    <input type="hidden" name="genre" value="{{ request.args.get('genre') }}">
+    {% endif %}
+    <div class="input-group">
+        <input type="text" name="q" class="form-control"
+               placeholder="Search by title, location, or description..."
+               value="{{ search_query }}">
+        <button class="btn btn-primary" type="submit">Search</button>
+        {% if search_query %}
+        <a href="{{ url_for('main.view_events', genre=request.args.get('genre')) }}"
+           class="btn btn-outline-secondary">Clear</a>
+        {% endif %}
+    </div>
+</form>
     <!-- Genre filter -->
     <div class="mb-4">
         <a href="{{ url_for('main.view_events') }}"
@@ -86,7 +101,7 @@
     <!-- Empty state -->
     <div class="text-center py-5">
         <p class="text-muted fs-5">
-            No events found{% if request.args.get('genre') %} for <strong>{{ request.args.get('genre') }}</strong>{% endif %}.
+            No events found{% if search_query %} for "<strong>{{ search_query }}</strong>"{% endif %}{% if request.args.get('genre') %} in <strong>{{ request.args.get('genre') }}</strong>{% endif %}.
         </p>
         <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">Create the first one</a>
     </div>
