@@ -5,14 +5,16 @@ from wtforms.widgets import EmailInput
 
 # creates the login information
 class LoginForm(FlaskForm):
-    user_name=StringField("User Name", validators=[InputRequired('Enter user name')])
+    user_name=StringField("Full Name", validators=[InputRequired('Enter user name')])
     password=PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 
  # this is the registration form
 class RegisterForm(FlaskForm):
-    user_name=StringField("User Name", validators=[InputRequired()])
-    email = StringField("Email Address", validators=[Email("Please enter a valid email")])
+    user_name=StringField("Full Name", validators=[InputRequired()])
+    contact_number=StringField("Contact Number", validators=[InputRequired()])
+    street_address=StringField("Street Address", validators=[InputRequired()])
+    email = StringField("Email Address", validators=[InputRequired(),Email("Please enter a valid email")])
     # linking two fields - password should be equal to data entered in confirm
     password=PasswordField("Password", validators=[InputRequired(),
                   EqualTo('confirm', message="Passwords should match")])

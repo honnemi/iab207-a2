@@ -44,10 +44,20 @@ def create_app():
     from . import auth
     app.register_blueprint(auth.auth_bp)
     """
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-    from . import views, bookings
+    from .models import User
+    @login_manager.user_loader
+    def load_user(user_id):
+       return db.session.scalar(db.select(User).where(User.id==user_id))
+    
+
+    from . import views, bookings, auth
     app.register_blueprint(views.main_bp)
     app.register_blueprint(bookings.bookings_bp)
+    app.register_blueprint(auth.auth_bp)
 
     return app
 

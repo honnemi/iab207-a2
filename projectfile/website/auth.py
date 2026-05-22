@@ -26,9 +26,39 @@ def login():
             login_user(user)
             nextp = request.args.get('next') # this gives the url from where the login page was accessed
             print(nextp)
-            if next is None or not nextp.startswith('/'):
-                return redirect(url_for('index'))
+            if nextp is None or not nextp.startswith('/'):
+                return redirect(url_for('main.view_events'))
             return redirect(nextp)
         else:
             flash(error)
     return render_template('user.html', form=login_form, heading='Login')
+
+@auth_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    register_form = RegisterForm()
+    error = None
+    if register_form.validate_on_submit():
+        user_name = register_form.user_name.data
+        contact_number = register_form.contact_number.data
+        street_address = register_form.street_address.data
+        email = register_form.email.data
+        password = register_form.password.data
+        existing_user = db.session.scalar(db.select(User).where(User.email==email)) 
+        if existing_user:
+            error = 'Email already registered'
+        else:
+            password_hash = generate_password_hash(password)
+            new_user = User (name=user_name, contact_number=contact_number, street_address=street_address, email=email, password_hash=password_hash)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Registration successful. Please log in.')
+            return redirect(url_for('auth.login'))
+        flash(error)
+    return render_template ('user.html', form=register_form, heading='Register')
+
+@auth_bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('main.view_events'))

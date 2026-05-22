@@ -25,15 +25,6 @@ def view_events():
     events = query.all()
     return render_template('view_events.html', events=events, search_query=search_query)
 
-@main_bp.route('/login_testing')
-def login_testing():
-    form = LoginForm()
-    return render_template('user.html', form = form, heading = 'Login')
-
-@main_bp.route('/register_testing')
-def register_testing():
-    form = RegisterForm()
-    return render_template('user.html', form = form, heading = 'Register')
 
 @main_bp.route('/events/create', methods=['GET', 'POST'])
 def create_event():
