@@ -28,21 +28,25 @@
                             </li>
                         </ul>
 
+                        {% if current_user.is_authenticated %}
                         <!--In the future, will show current user's name if logged in and a logout button instead-->
                         <ul class="navbar-nav ms-auto d-flex align-items-center">
                             <!--In the future, only show dropdown when logged in-->
                             <li class="nav-item dropdown me-3">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Guest
+                                    Welcome, {{current_user.name}}
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{url_for('bookings.show_bookings')}}">My Bookings</a></li>
+                                    <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a></li>
                                 </ul>
                             </li>
 
+                            {% else %}
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-primary btn-sm" href="{{url_for('main.login_testing')}}">Login/Register</a>
+                                <a class="btn btn-primary btn-sm" href="{{url_for('auth.login')}}">Login/Register</a>
                             </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

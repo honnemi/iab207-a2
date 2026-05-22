@@ -14,12 +14,12 @@
         <!-- When you have Login form, then show the user a link to register -->
         {% if heading == 'Login' %}
         <div class="text-center mt-3">
-          <p class="mb-0">New user? <a href="{{url_for('main.register_testing')}}">Click here</a> to register.</p>
+          <p class="mb-0">New user? <a href="{{url_for('auth.register')}}">Click here</a> to register.</p>
         </div>
         {% endif %}
         {% if heading == 'Register' %}
         <div class="text-center mt-3">
-          <p class="mb-0">Already have an account? <a href="{{url_for('main.login_testing')}}">Login here</a></p>
+          <p class="mb-0">Already have an account? <a href="{{url_for('auth.login')}}">Login here</a></p>
         </div>
         {% endif %}
       </div>
