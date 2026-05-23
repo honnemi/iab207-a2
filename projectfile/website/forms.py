@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, SelectField, DecimalField, IntegerField
+from wtforms.fields import FileField, TextAreaField, SubmitField, StringField, PasswordField, SelectField, DecimalField, IntegerField
 from wtforms.validators import InputRequired, Length, Email, EqualTo, Regexp, Optional, NumberRange
 from wtforms.widgets import EmailInput
+from flask_wtf.file import FileField, FileAllowed
 
 # creates the login information
 class LoginForm(FlaskForm):
@@ -44,6 +45,12 @@ RATING_CHOICES = [
     ('MA15+', 'MA15+'),
     ('R18+', 'R18+'),
 ]
+
+ACKNOWLEDGEMENT_CHOICES = [
+    ('none',     'No Acknowledgement of Country'),
+    ('generic',  'Acknowledgement of Country: Generic'),
+    ('enhanced', 'Acknowledgement of Country: Enhanced'),
+]
  
 class EventForm(FlaskForm):
     title = StringField(
@@ -82,12 +89,23 @@ class EventForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={"type": "datetime-local"}
     )
-    image = StringField(
-        "Movie Poster URL",
-        validators=[Optional(), Length(max=255)]
+    image = FileField(
+        "Movie Poster",
+        validators=[FileAllowed(['jpg', 'jpeg', 'png', 'webp'], 'Images only!'), Optional()]
     )
+
+    acknowledgement_type = SelectField(
+        "Acknowledgement of Country",
+        choices=ACKNOWLEDGEMENT_CHOICES, default='none'
+    )
+
+    acknowledgement_text = TextAreaField(
+        "Custom Acknowledgement Text (Enhanced only)",
+        validators=[Optional(), Length(max=20000)]
+    )
+
     submit = SubmitField("Create Event")
- 
+    
 class CommentForm(FlaskForm):
     text = TextAreaField("Comment", validators=[InputRequired(), Length(min=1, max=500)])
     submit = SubmitField("Post comment")
