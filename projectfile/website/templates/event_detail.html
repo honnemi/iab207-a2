@@ -13,14 +13,13 @@
         <!-- Left: Poster -->
         <div class="col-md-4">
             {% if event.image %}
-            <img src="{{ event.image }}" alt="{{ event.title }}" class="img-fluid rounded shadow-sm w-100"
-                style="max-height: 400px; object-fit: cover;"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            <img src="{{ url_for('static', filename='images/' + event.image) }}" alt="{{ event.title }}"
+                class="img-fluid rounded shadow-sm w-100" style="max-height: 400px; object-fit: cover;">
             <div class="bg-light rounded d-flex align-items-center justify-content-center"
                 style="height: 360px; font-size: 72px; display: none!important;">🎬</div>
             {% else %}
             <div class="bg-light rounded d-flex align-items-center justify-content-center"
-                style="height: 360px; font-size: 72px;">🎬</div>
+                style="height: 360px; font-size: 72px;"></div>
             {% endif %}
         </div>
 
@@ -131,6 +130,10 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> cca3bbe2e871a338146209959d4fa3115776b6b0
 
     <!-- Description -->
     <div class="row mt-2">

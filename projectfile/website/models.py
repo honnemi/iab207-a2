@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
 
     comments = db.relationship('Comment', backref='user', lazy=True)
     orders = db.relationship('Booking', backref='user', lazy=True)
+    events = db.relationship('Event', backref = 'owner', lazy=True)
 
 class Event(db.Model):
     __tablename__ = 'event'
@@ -27,8 +28,23 @@ class Event(db.Model):
     date = db.Column(db.DateTime)
     image = db.Column(db.String(255))
 
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = True)
+    is_cancelled = db.Column (db.Boolean, default = False, nullable=False)
+    acknowledgement_type = db.Column(db.String(20), default='none', nullable=False)
+    acknowledgement_text = db.Column(db.Text, nullable=True)
+
     comments = db.relationship('Comment', backref='event', lazy=True)
     orders = db.relationship('Booking', backref='event', lazy=True)
+
+    @property
+    def status(self):
+        if self.is_cancelled:
+            return 'Cancelled'
+        if self.tickets_available is not None and self.tickets_available <= 0:
+            return 'Sold Out'
+        if self.date and self.date < datetime.now(datetime.timezone.utc):
+            return 'Inactive'
+        return 'Open'
 
 class Comment(db.Model):
     __tablename__ = 'comment'
