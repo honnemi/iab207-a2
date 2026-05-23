@@ -69,3 +69,51 @@ header, h1, h2, h3, h4, h5, h6 {
 .ticket-price {
     color: #2F2A26 !important; 
 }
+
+.event-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .img-wrapper {
+        position: relative;
+    }
+
+    .status-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+    }
+
+    .date-badge {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.65);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        z-index: 2;
+    }
+
+    .genre-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+    }
+
+    .price-row {
+        border-top: 1px solid #f0f0f0;
+        padding-top: 10px;
+        margin-top: auto;
+    }
