@@ -4,7 +4,7 @@
 <div class="container mt-5">
 
     <!-- Back link -->
-    <a href="{{ url_for('main.view_events') }}" class="text-decoration-none text-muted mb-4 d-inline-block">
+    <a href="{{ url_for('home.view_events') }}" class="text-decoration-none text-muted mb-4 d-inline-block">
         ← Back to all events
     </a>
 
@@ -129,7 +129,7 @@
         </div>
     </div>
     <!-- Description -->
-    <div class="row mt-2">
+    <div class="row mt-4">
         <div class="col-12">
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
@@ -151,9 +151,16 @@
                     {% for comment in event.comments %}
                     <div class="border-bottom pb-3 mb-3">
                         <div class="fw-semibold small mb-1">
-                            {{ comment.user.name if comment.user else 'Anonymous' }}
+                            {{ comment.user.name }}
                         </div>
-                        <p class="text-muted small mb-0">{{ comment.text }}</p>
+
+                        <p class="text-muted small mb-1">
+                            {{ comment.text }}
+                        </p>
+
+                        <div class="text-muted" style="font-size: 0.75rem;">
+                            {{ comment.created_at.strftime('%d/%m/%Y %I:%M %p') }}
+                        </div>
                     </div>
                     {% endfor %}
                     {% else %}
@@ -161,7 +168,7 @@
                     {% endif %}
 
                     <!-- Add comment -->
-                    <form method="POST" action="{{ url_for('main.add_comment', event_id=event.id) }}" class="mt-3">
+                    <form method="POST" action="{{ url_for('home.add_comment', event_id=event.id) }}" class="mt-3">
                         {{ comment_form.hidden_tag() }}
                         <div class="mb-2">
                             <textarea class="form-control" name="text" rows="3"

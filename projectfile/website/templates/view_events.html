@@ -2,7 +2,7 @@
 {% block content %}
 
 <!-- Hero / Jumbotron -->
-<div class="py-5 mb-4" style="
+<div class="py-5 mb-5" style="
      background-image: url('{{ url_for('static', filename='images/event_image.jpg') }}');
      background-size: cover;
      background-position: center;
@@ -16,7 +16,7 @@
         <p class="lead mb-4" style="color: rgba(255,255,255,0.85);">
             Lights, camera, book! Find unforgettable film experiences around Brisbane
         </p>
-        <form method="GET" action="{{ url_for('main.view_events') }}" class="d-flex justify-content-center">
+        <form method="GET" action="{{ url_for('home.view_events') }}" class="d-flex justify-content-center">
             <div class="input-group" style="max-width: 500px;">
                 <input type="text" name="q" class="form-control form-control-lg"
                        placeholder="Search events..."
@@ -32,17 +32,17 @@
     <!-- Page header -->
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">All Events</h2>
-        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">+ Create Event</a>
+        <a href="{{ url_for('home.create_event') }}" class="btn btn-primary">+ Create Event</a>
     </div>
 
     <!-- Genre filter -->
     <div class="mb-4">
-        <a href="{{ url_for('main.view_events') }}"
+        <a href="{{ url_for('home.view_events') }}"
            class="btn btn-sm {% if not request.args.get('genre') %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
             All
         </a>
         {% for g in ['Action','Comedy','Drama','Horror','Sci-Fi','Fantasy','Romance','Thriller','Animated'] %}
-        <a href="{{ url_for('main.view_events', genre=g) }}"
+        <a href="{{ url_for('home.view_events', genre=g) }}"
            class="btn btn-sm {% if request.args.get('genre') == g %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
             {{ g }}
         </a>
@@ -109,7 +109,7 @@
                         </span>
                     </div>
 
-                    <a href="{{ url_for('main.event_detail', event_id=event.id) }}"
+                    <a href="{{ url_for('home.event_detail', event_id=event.id) }}"
                        class="btn btn-outline-primary w-100">View Details</a>
                 </div>
             </div>
@@ -125,7 +125,7 @@
             {% if search_query %} for "<strong>{{ search_query }}</strong>"{% endif %}
             {% if request.args.get('genre') %} in <strong>{{ request.args.get('genre') }}</strong>{% endif %}.
         </p>
-        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">Create the first one</a>
+        <a href="{{ url_for('home.create_event') }}" class="btn btn-primary">Create the first one</a>
     </div>
     {% endif %}
 

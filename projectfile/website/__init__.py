@@ -28,8 +28,8 @@ def create_app():
        print("LOAD USER CALLED:", user_id)
        return db.session.scalar(db.select(User).where(User.id==user_id))
 
-    from . import views, bookings, auth
-    app.register_blueprint(views.main_bp)
+    from . import home, bookings, auth
+    app.register_blueprint(home.home_bp)
     app.register_blueprint(bookings.bookings_bp)
     app.register_blueprint(auth.auth_bp)
 
