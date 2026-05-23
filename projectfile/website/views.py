@@ -4,6 +4,8 @@ from . models import Event, Booking, Comment
 from . import db
 from datetime import datetime 
 from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+import os
 
 main_bp = Blueprint('main', __name__)
 
@@ -31,7 +33,6 @@ def view_events():
 
 
 @main_bp.route('/events/create', methods=['GET', 'POST'])
-@login_required 
 def create_event():
     form = EventForm()
  
@@ -44,10 +45,20 @@ def create_event():
             event_date = None
 
         if (form.acknowledgement_type.data == 'enhanced'
-            and not form.acknowledgement_text.data.strip()):
+            and not (form.acknowledgement_text.data or '').strip()):
             flash ('Please enter your custom Acknowledgment text for the Enhanced option.', 'danger')
             return render_template('events.html', form = form)
- 
+
+        image_filename = None
+        if form.image.data:
+            file = form.image.data
+            filename = secure_filename(file.filename)
+            # Save into website/static/event_images/
+            upload_folder = os.path.join(os.path.dirname(__file__), 'static', 'images')
+            os.makedirs(upload_folder, exist_ok=True)
+            file.save(os.path.join(upload_folder, filename))
+            image_filename = filename 
+
         event = Event(
             title=form.title.data,
             description=form.description.data,
@@ -57,8 +68,8 @@ def create_event():
             tickets_available=form.tickets_available.data,
             location=form.location.data,
             date=event_date,
-            image=form.image.data or None,
-            owner_id = current_user.id,
+            image=image_filename,
+            owner_id =None,
             acknowledgement_type=form.acknowledgement_type.data,
             acknowledgement_text=form.acknowledgement_text.data or None
 

@@ -5,7 +5,7 @@
     <h2 class="mb-1">Create Event</h2>
     <p class="text-muted mb-4">Host a movie night for your community</p>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         <!-- Basic Info -->
@@ -15,7 +15,7 @@
             {{ form.title.label(class="form-label fw-semibold") }}
             {{ form.title(class="form-control", placeholder="e.g. Inception Night at QUT") }}
             {% for error in form.title.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -23,7 +23,7 @@
             {{ form.description.label(class="form-label fw-semibold") }}
             {{ form.description(class="form-control", rows=4, placeholder="Tell people what to expect...") }}
             {% for error in form.description.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -35,14 +35,14 @@
                 {{ form.genre.label(class="form-label fw-semibold") }}
                 {{ form.genre(class="form-select") }}
                 {% for error in form.genre.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 {{ form.rating.label(class="form-label fw-semibold") }}
                 {{ form.rating(class="form-select") }}
                 {% for error in form.rating.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
         </div>
@@ -58,26 +58,27 @@
                     {{ form.ticket_price(class="form-control", placeholder="e.g. 15.00") }}
                 </div>
                 {% for error in form.ticket_price.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 {{ form.tickets_available.label(class="form-label fw-semibold") }}
                 {{ form.tickets_available(class="form-control", placeholder="e.g. 50") }}
                 {% for error in form.tickets_available.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Location & Time -->
-        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time</h6>
+        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time
+        </h6>
 
         <div class="mb-3">
             {{ form.location.label(class="form-label fw-semibold") }}
             {{ form.location(class="form-control", placeholder="e.g. Brisbane Powerhouse, New Farm") }}
             {% for error in form.location.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -85,18 +86,47 @@
             {{ form.date.label(class="form-label fw-semibold") }}
             {{ form.date(class="form-control") }}
             {% for error in form.date.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <h6 class="text-uppercase text-muted mt-4 mb-3" style="font-size: 11px; letter-spacing: 1px;">
+            Acknowledgement of Country
+        </h6>
+
+        <div class="mb-3">
+            {{ form.acknowledgement_type.label(class="form-label fw-semibold") }}
+            {{ form.acknowledgement_type(class="form-select", id="ack-select") }}
+            <div class="form-text text-muted mt-1">
+                An Acknowledgement of Country recognises the Traditional Custodians of the land
+                where your event is held and their enduring connection to Country. It is an important
+                part of reconciliation in Australia.
+            </div>
+        </div>
+
+        <div class="mb-4">
+            {{ form.acknowledgement_text.label(class="form-label fw-semibold") }}
+            <div class="form-text text-muted mb-2">
+                Only required if you selected <strong>Enhanced</strong> above.
+                Find your local Traditional Custodians at
+                <a href="https://aiatsis.gov.au/explore/map-indigenous-australia" target="_blank">AIATSIS</a> or
+                <a href="https://www.knowyourcountry.com.au" target="_blank">Know Your Country</a>.
+            </div>
+            {{ form.acknowledgement_text(class="form-control", rows=4,
+            placeholder="e.g. I acknowledge the Turrbal and Jagera peoples as Traditional Custodians of this land...")
+            }}
+            {% for error in form.acknowledgement_text.errors %}
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
         <!-- Poster -->
         <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Movie Poster</h6>
-
-        <div class="mb-4">
+        <div class="mb-5">
             {{ form.image.label(class="form-label fw-semibold") }}
-            {{ form.image(class="form-control", placeholder="https://...") }}
+            {{ form.image(class="form-control") }}
             {% for error in form.image.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 

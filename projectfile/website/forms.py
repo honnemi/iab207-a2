@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, SelectField, DecimalField, IntegerField
+from wtforms.fields import FileField, TextAreaField, SubmitField, StringField, PasswordField, SelectField, DecimalField, IntegerField
 from wtforms.validators import InputRequired, Length, Email, EqualTo, Regexp, Optional, NumberRange
 from wtforms.widgets import EmailInput
+from flask_wtf.file import FileField, FileAllowed
 
 # creates the login information
 class LoginForm(FlaskForm):
@@ -88,9 +89,9 @@ class EventForm(FlaskForm):
         validators=[InputRequired()],
         render_kw={"type": "datetime-local"}
     )
-    image = StringField(
-        "Movie Poster URL",
-        validators=[Optional(), Length(max=255)]
+    image = FileField(
+        "Movie Poster",
+        validators=[FileAllowed(['jpg', 'jpeg', 'png', 'webp'], 'Images only!'), Optional()]
     )
 
     acknowledgement_type = SelectField(

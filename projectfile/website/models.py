@@ -32,7 +32,7 @@ class Event(db.Model):
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = True)
     is_cancelled = db.Column (db.Boolean, default = False, nullable=False)
-    acknowledgment_type = db.Column(db.String(20), default='none', nullable=False)
+    acknowledgement_type = db.Column(db.String(20), default='none', nullable=False)
     acknowledgement_text = db.Column(db.Text, nullable=True)
 
     comments = db.relationship('Comment', backref='event', lazy=True)
@@ -40,7 +40,6 @@ class Event(db.Model):
 
     @property
     def status(self):
-        """ Auto - computed - never stored in DB."""
         if self.is_cancelled:
             return 'Cancelled'
         if self.tickets_available is not None and self.tickets_available <= 0:
