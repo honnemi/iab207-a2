@@ -8,18 +8,16 @@
         ← Back to all events
     </a>
 
-    <div class="row g-4 mt-1">
+    <div class="row g-4 mt-1 align-items-stretch">
 
         <!-- Left: Poster -->
         <div class="col-md-4">
             {% if event.image %}
             <img src="{{ url_for('static', filename='images/' + event.image) }}" alt="{{ event.title }}"
-                class="img-fluid rounded shadow-sm w-100" style="max-height: 400px; object-fit: cover;">
-            <div class="bg-light rounded d-flex align-items-center justify-content-center"
-                style="height: 360px; font-size: 72px; display: none!important;">🎬</div>
+                class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
             {% else %}
-            <div class="bg-light rounded d-flex align-items-center justify-content-center"
-                style="height: 360px; font-size: 72px;"></div>
+            <div class="bg-light rounded d-flex align-items-center justify-content-center h-100"
+                style="min-height: 300px; font-size: 72px;">🎬</div>
             {% endif %}
         </div>
 
@@ -130,11 +128,6 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> cca3bbe2e871a338146209959d4fa3115776b6b0
-
     <!-- Description -->
     <div class="row mt-2">
         <div class="col-12">
