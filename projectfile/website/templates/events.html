@@ -15,7 +15,7 @@
             {{ form.title.label(class="form-label fw-semibold") }}
             {{ form.title(class="form-control", placeholder="e.g. Inception Night at QUT") }}
             {% for error in form.title.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -23,7 +23,7 @@
             {{ form.description.label(class="form-label fw-semibold") }}
             {{ form.description(class="form-control", rows=4, placeholder="Tell people what to expect...") }}
             {% for error in form.description.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -35,14 +35,14 @@
                 {{ form.genre.label(class="form-label fw-semibold") }}
                 {{ form.genre(class="form-select") }}
                 {% for error in form.genre.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 {{ form.rating.label(class="form-label fw-semibold") }}
                 {{ form.rating(class="form-select") }}
                 {% for error in form.rating.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
         </div>
@@ -58,26 +58,27 @@
                     {{ form.ticket_price(class="form-control", placeholder="e.g. 15.00") }}
                 </div>
                 {% for error in form.ticket_price.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
             <div class="col-md-6 mb-3">
                 {{ form.tickets_available.label(class="form-label fw-semibold") }}
                 {{ form.tickets_available(class="form-control", placeholder="e.g. 50") }}
                 {% for error in form.tickets_available.errors %}
-                    <div class="text-danger small mt-1">{{ error }}</div>
+                <div class="text-danger small mt-1">{{ error }}</div>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Location & Time -->
-        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time</h6>
+        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time
+        </h6>
 
         <div class="mb-3">
             {{ form.location.label(class="form-label fw-semibold") }}
             {{ form.location(class="form-control", placeholder="e.g. Brisbane Powerhouse, New Farm") }}
             {% for error in form.location.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -85,7 +86,7 @@
             {{ form.date.label(class="form-label fw-semibold") }}
             {{ form.date(class="form-control") }}
             {% for error in form.date.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -96,7 +97,7 @@
             {{ form.image.label(class="form-label fw-semibold") }}
             {{ form.image(class="form-control", placeholder="https://...") }}
             {% for error in form.image.errors %}
-                <div class="text-danger small mt-1">{{ error }}</div>
+            <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 

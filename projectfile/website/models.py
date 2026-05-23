@@ -2,7 +2,6 @@ from . import db
 from datetime import datetime
 from flask_login import UserMixin
 
-
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -14,7 +13,6 @@ class User(db.Model, UserMixin):
 
     comments = db.relationship('Comment', backref='user', lazy=True)
     orders = db.relationship('Booking', backref='user', lazy=True)
-
 
 class Event(db.Model):
     __tablename__ = 'event'
@@ -32,7 +30,6 @@ class Event(db.Model):
     comments = db.relationship('Comment', backref='event', lazy=True)
     orders = db.relationship('Booking', backref='event', lazy=True)
 
-
 class Comment(db.Model):
     __tablename__ = 'comment'
     id = db.Column(db.Integer, primary_key=True)
@@ -40,7 +37,6 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
-
 
 class Booking(db.Model):
     __tablename__ = 'booking'

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
-from . forms import LoginForm, RegisterForm, EventForm, CommentForm
+from flask_login import current_user
+from . forms import EventForm, CommentForm
 from . models import Event, Booking
 from . import db
 from datetime import datetime 
@@ -83,20 +84,25 @@ def event_detail(event_id):
                 qty -= 1
 
         elif action == "checkout":
-            booking = Booking(
-                created_at=datetime.now(),
-                user_id=1, # replace later with current_user.id
-                event_id=event.id,
-                quantity=qty
-            )
-            db.session.add(booking)
+            if not current_user.is_authenticated:
+                flash("You must be logged in to buy tickets", "danger")
+                return redirect(request.url)
+        
+            else:
+                booking = Booking(
+                    created_at=datetime.now(),
+                    user_id=current_user.id, 
+                    event_id=event.id,
+                    quantity=qty
+                )
+                db.session.add(booking)
 
-            event.tickets_available -= qty # update tickets available for event
-            db.session.commit()
+                event.tickets_available -= qty # update tickets available for event
+                db.session.commit()
 
-            session.pop("cart", None)
+                session.pop("cart", None)
 
-            return redirect(url_for("bookings.show_order_confirmation", booking_id=booking.id))
+                return redirect(url_for("bookings.show_order_confirmation", booking_id=booking.id))
 
         cart[key] = qty
         session["cart"] = cart
