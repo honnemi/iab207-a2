@@ -2,14 +2,20 @@
 {% block content %}
 
 <!-- Hero / Jumbotron -->
-<div class="py-5 mb-4 border-bottom" style="background-color: #f8f5f0;">
-    <div class="container text-center py-3">
-        <div style="font-size: 56px;">🎬</div>
-        <h1 class="display-5 fw-bold mt-2">Brisbane Movie Nights</h1>
-        <p class="lead text-muted mb-4">
-            Discover and book unforgettable cinema experiences across Brisbane
+<div class="py-5 mb-4" style="
+     background-image: url('{{ url_for('static', filename='images/event_image.jpg') }}');
+     background-size: cover;
+     background-position: center;
+     position: relative;">
+    
+    <!-- Dark overlay so text is readable -->
+    <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.45);"></div>
+
+    <div class="container text-center py-5 text-white" style="position: relative; z-index: 1;">
+        <h1 class="display-4 fw-bold" style="color: bisque;">Brisbane Movie Nights Events</h1>
+        <p class="lead mb-4" style="color: rgba(255,255,255,0.85);">
+            Lights, camera, book! Find unforgettable film experiences around Brisbane
         </p>
-        <!-- Quick search inside hero -->
         <form method="GET" action="{{ url_for('main.view_events') }}" class="d-flex justify-content-center">
             <div class="input-group" style="max-width: 500px;">
                 <input type="text" name="q" class="form-control form-control-lg"
