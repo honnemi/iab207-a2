@@ -45,28 +45,28 @@
             <!-- Meta row -->
             <div class="row g-2 mb-4">
                 <div class="col-6 col-md-3">
-                    <div class="border rounded p-2 text-center">
+                    <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Date</div>
                         <div class="fw-semibold small">{{ event.date.strftime('%d %b %Y') if event.date else 'TBC' }}
                         </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="border rounded p-2 text-center">
+                    <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Time</div>
-                        <div class="fw-semibold small" {{ event.date.strftime('%I:%M %p').lstrip('0') if event.date
-                            else 'TBC' }}>
+                        <div class="fw-semibold small">{{ event.date.strftime('%I:%M %p').lstrip('0') if event.date
+                            else 'TBC' }}
                         </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="border rounded p-2 text-center">
+                    <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Genre</div>
                         <div class="fw-semibold small">{{ event.genre if event.genre else '—' }}</div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
-                    <div class="border rounded p-2 text-center">
+                    <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Rating</div>
                         <div class="fw-semibold small">{{ event.rating if event.rating else '—' }}</div>
                     </div>
@@ -74,11 +74,11 @@
             </div>
 
             <!-- Ticket box -->
-            <div class="card border-primary mb-4">
-                <div class="card-body">
+            <div id="ticket-box" class="card border-primary mb-4 shadow-sm">
+                <div class="card-body ">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <div class="fs-2 fw-bold text-primary">
+                            <div id="ticket-price" class="fs-2 fw-bold text-primary">
                                 {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{%
                                 endif %}
                             </div>
@@ -116,7 +116,7 @@
                             </span>
                         </div>
                         <div>
-                            <button class="btn btn-primary btn-lg" name="action" value="checkout">
+                            <button class="btn btn-primary btn-lg mt-4" name="action" value="checkout">
                                 Buy Tickets
                             </button>
                         </div>
@@ -135,7 +135,7 @@
     <!-- Description -->
     <div class="row mt-2">
         <div class="col-12">
-            <div class="card mb-4">
+            <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">About this event</h5>
                     <p class="card-text text-muted">{{ event.description }}</p>
@@ -147,7 +147,7 @@
     <!-- Comments -->
     <div class="row">
         <div class="col-12">
-            <div class="card mb-5">
+            <div class="card mb-5 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title mb-4">Comments</h5>
 
@@ -171,7 +171,7 @@
                             <textarea class="form-control" name="text" rows="3"
                                 placeholder="Leave a comment..."></textarea>
                         </div>
-                        <button type="submit" class="btn btn-outline-primary btn-sm">Post Comment</button>
+                        <button type="submit" class="btn btn-outline-primary btn-sm mt-4">Post Comment</button>
                     </form>
                 </div>
             </div>
