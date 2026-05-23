@@ -2,6 +2,7 @@ body {
     font-family: "Quicksand", sans-serif !important;
     font-weight: 400;
     background: #F0EBE7;
+    padding-top: 80px;
 }
 
 body, h1, h2, h3, h4, h5, h6, p, a, li, span, .navbar-brand {
