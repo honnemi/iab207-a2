@@ -1,16 +1,16 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, abort
 from flask_login import current_user
-from . forms import EventForm, CommentForm
-from . models import Event, Booking, Comment
+from .forms import EventForm, CommentForm
+from .models import Event, Booking, Comment
 from . import db
 from datetime import datetime 
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 import os
 
-main_bp = Blueprint('main', __name__)
+home_bp = Blueprint('home', __name__)
 
-@main_bp.route('/')
+@home_bp.route('/')
 def view_events():
     genre_filter = request.args.get('genre')
     search_query = request.args.get('q', '').strip()
@@ -33,7 +33,7 @@ def view_events():
                            all_genres=all_genres, selected_genre=genre_filter or '')
 
 
-@main_bp.route('/events/create', methods=['GET', 'POST'])
+@home_bp.route('/events/create', methods=['GET', 'POST'])
 def create_event():
     form = EventForm()
  
@@ -47,8 +47,8 @@ def create_event():
 
         if (form.acknowledgement_type.data == 'enhanced'
             and not (form.acknowledgement_text.data or '').strip()):
-            flash ('Please enter your custom Acknowledgment text for the Enhanced option.', 'danger')
-            return render_template('events.html', form = form)
+            flash ('Please enter your custom Acknowledgment text for the Enhanced option.', 'warning')
+            return render_template('create_events.html', form = form)
 
         image_filename = None
         if form.image.data:
@@ -78,11 +78,11 @@ def create_event():
         db.session.add(event)
         db.session.commit()
         flash('Event created successfully!')
-        return redirect(url_for('main.event_detail', event_id=event.id))
+        return redirect(url_for('home.event_detail', event_id=event.id))
  
-    return render_template('events.html', form=form)
+    return render_template('create_events.html', form=form)
 
-@main_bp.route('/events/<int:event_id>', methods=['GET', 'POST'])
+@home_bp.route('/events/<int:event_id>', methods=['GET', 'POST'])
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     comment_form = CommentForm()
@@ -105,7 +105,7 @@ def event_detail(event_id):
                 qty -= 1
         elif action == "checkout":
             if not current_user.is_authenticated:
-                flash("You must be logged in to buy tickets", "danger")
+                flash("You must be logged in to buy tickets", "warning")
                 return redirect(request.url)
         
             else:
@@ -126,7 +126,7 @@ def event_detail(event_id):
 
         cart[key] = qty
         session["cart"] = cart
-        return redirect(url_for("main.event_detail", event_id=event_id))
+        return redirect(url_for("home.event_detail", event_id=event_id))
 
     quantity = cart[key]
     comments = Comment.query.filter_by(event_id = event_id)\
@@ -134,22 +134,26 @@ def event_detail(event_id):
     
     return render_template('event_detail.html', event=event, comment_form=comment_form, quantity=quantity, comments=comments)
 
-@main_bp.route('/events/<int:event_id>/comment', methods=['POST'])
+@home_bp.route('/events/<int:event_id>/comment', methods=['POST'])
 def add_comment(event_id):
-    event = Event.query.get_or_404(event_id)
-    text = request.form.get('text', '').strip()
-    if text:
-        new_comment = Comment(text=text, 
-                              user_id=current_user.id if current_user.is_authenticated else None, 
-                              event_id=event.id)
-        db.session.add(new_comment)
-        db.session.commit()
-        flash('Comment posted!')
+    if not current_user.is_authenticated:
+        flash("You must be logged in to comment", "warning")
+        return redirect(url_for('home.event_detail', event_id=event_id))
     else:
-        flash('Comment cannot be empty.')
-    return redirect(url_for('main.event_detail', event_id=event_id))
+        event = Event.query.get_or_404(event_id)
+        text = request.form.get('text', '').strip()
+        if text:
+            new_comment = Comment(text=text, 
+                                user_id=current_user.id if current_user.is_authenticated else None, 
+                                event_id=event.id)
+            db.session.add(new_comment)
+            db.session.commit()
+            flash('Comment posted!', 'success')
+        else:
+            flash('Comment cannot be empty.', 'warning')
+    return redirect(url_for('home.event_detail', event_id=event_id))
 
-@main_bp.route('/events/<int:event_id>/edit', methods=['GET', 'POST'])
+@home_bp.route('/events/<int:event_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -158,7 +162,7 @@ def edit_event(event_id):
         abort(403)
     if event.is_cancelled:
         flash('Cancelled events cannot be edited.', 'warning')
-        return redirect(url_for('main.event_detail', event_id=event_id))
+        return redirect(url_for('home.event_detail', event_id=event_id))
 
     form = EventForm(obj=event)  # pre-fills the form with existing data
 
@@ -181,13 +185,13 @@ def edit_event(event_id):
         event.acknowledgement_text = form.acknowledgement_text.data or None
 
         db.session.commit()
-        flash('Event updated!', 'success')
-        return redirect(url_for('main.event_detail', event_id=event_id))
+        flash('Event updated!')
+        return redirect(url_for('home.event_detail', event_id=event_id))
 
-    return render_template('events.html', form=form, event=event)  # reuse same template
+    return render_template('create_events.html', form=form, event=event)  # reuse same template
 
 
-@main_bp.route('/events/<int:event_id>/cancel', methods=['POST'])
+@home_bp.route('/events/<int:event_id>/cancel', methods=['POST'])
 @login_required
 def cancel_event(event_id):
     event = Event.query.get_or_404(event_id)
@@ -197,5 +201,5 @@ def cancel_event(event_id):
 
     event.is_cancelled = True
     db.session.commit()
-    flash('Event has been cancelled.', 'success')
-    return redirect(url_for('main.event_detail', event_id=event_id))
+    flash('Event has been cancelled.')
+    return redirect(url_for('home.event_detail', event_id=event_id))

@@ -27,10 +27,10 @@ def login():
             nextp = request.args.get('next') # this gives the url from where the login page was accessed
             print(nextp)
             if nextp is None or not nextp.startswith('/'):
-                return redirect(url_for('main.view_events'))
+                return redirect(url_for('home.view_events'))
             return redirect(nextp)
         else:
-            flash(error)
+            flash(error, 'danger')
     return render_template('user.html', form=login_form, heading='Login')
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
@@ -53,7 +53,7 @@ def register():
             db.session.commit()
             flash('Registration successful. Please log in.')
             return redirect(url_for('auth.login'))
-        flash(error)
+        flash(error, 'danger')
     return render_template ('user.html', form=register_form, heading='Register')
 
 @auth_bp.route('/logout')
@@ -61,4 +61,4 @@ def register():
 def logout():
     logout_user()
     flash('You have been logged out.')
-    return redirect(url_for('main.view_events'))
+    return redirect(url_for('home.view_events'))

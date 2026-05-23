@@ -1,22 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
 
+<style>
+    .event-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .event-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+    .img-wrapper {
+        position: relative;
+    }
+    .status-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+    }
+    .genre-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #888;
+    }
+    .price-row {
+        border-top: 1px solid #f0f0f0;
+        padding-top: 10px;
+        margin-top: auto;
+    }
+</style>
+
 <!-- Hero -->
 <div class="py-5 mb-4" style="
-     background-image: url('{{ url_for('static', filename='images/hero.jpg') }}');
+     background-image: url('{{ url_for('static', filename='images/event_image.jpg') }}');
      background-size: cover;
      background-position: center;
      position: relative;">
     <div style="position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.45);"></div>
     <div class="container text-center py-5 text-white" style="position: relative; z-index: 1;">
-        <h1 class="display-4 fw-bold">Brisbane Movie Nights</h1>
+        <h1 class="display-4 fw-bold" style="color: bisque;">Brisbane Movie Nights Events</h1>
         <p class="lead mb-4" style="color: rgba(255,255,255,0.85);">
-            Discover and book unforgettable cinema experiences across Brisbane
+            Explore Brisbane’s best cinemas and book a movie experience you’ll love
         </p>
-        <form method="GET" action="{{ url_for('main.view_events') }}" class="d-flex justify-content-center">
+        <form method="GET" action="{{ url_for('home.view_events') }}" class="d-flex justify-content-center">
             <div class="input-group" style="max-width: 500px;">
-                <input type="text" name="q" class="form-control form-control-lg" placeholder="Search events..."
-                    value="{{ search_query }}">
+                <input type="text" name="q" class="form-control form-control-lg"
+                       placeholder="Search events..."
+                       value="{{ search_query }}">
                 <button class="btn btn-primary btn-lg" type="submit">Search</button>
             </div>
         </form>
@@ -28,18 +62,18 @@
     <!-- Page header -->
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">All Events</h2>
-        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">+ Create Event</a>
+        <a href="{{ url_for('home.create_event') }}" class="btn btn-primary">+ Create Event</a>
     </div>
 
     <!-- Genre filter -->
     <div class="mb-4">
-        <a href="{{ url_for('main.view_events') }}"
-            class="btn btn-sm {% if not request.args.get('genre') %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
+        <a href="{{ url_for('home.view_events') }}"
+           class="btn btn-sm {% if not request.args.get('genre') %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
             All
         </a>
         {% for g in ['Action','Comedy','Drama','Horror','Sci-Fi','Fantasy','Romance','Thriller','Animated'] %}
-        <a href="{{ url_for('main.view_events', genre=g) }}"
-            class="btn btn-sm {% if request.args.get('genre') == g %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
+        <a href="{{ url_for('home.view_events', genre=g) }}"
+           class="btn btn-sm {% if request.args.get('genre') == g %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
             {{ g }}
         </a>
         {% endfor %}
@@ -52,16 +86,17 @@
         <div class="col">
             <div class="card h-100 shadow-sm event-card">
 
-                <!-- Image with overlaid badges -->
                 <div class="img-wrapper">
                     {% if event.image %}
-                    <img src="{{ url_for('static', filename='images/' + event.image) }}" class="card-img-top"
-                        alt="{{ event.title }}" style="height: 220px; object-fit: cover;">
+                    <img src="{{ url_for('static', filename='images/' + event.image) }}"
+                         class="card-img-top" alt="{{ event.title }}"
+                         style="height: 220px; object-fit: cover;">
                     {% else %}
                     <div class="bg-light d-flex align-items-center justify-content-center"
-                        style="height: 220px; font-size: 48px;">🎬</div>
+                         style="height: 220px; font-size: 48px;">🎬</div>
                     {% endif %}
 
+                    <!-- Status badge top-left -->
                     <div class="status-badge">
                         {% if event.status == 'Cancelled' %}
                         <span class="badge bg-danger px-3 py-2">
@@ -81,7 +116,6 @@
                         </span>
                         {% endif %}
                     </div>
-
                 </div>
 
                 <div class="card-body d-flex flex-column px-3 pt-3">
@@ -93,7 +127,6 @@
                     {% endif %}
 
                     <h5 class="card-title mb-3">{{ event.title }}</h5>
-
 
                     <p class="small text-muted mb-1">
                         <i class="bi bi-geo-alt-fill"></i> {{ event.location }}
@@ -107,8 +140,7 @@
                     </p>
                     {% endif %}
                     <p class="small text-muted mb-3">
-                        <i class="bi bi-people-fill"></i> {{ event.tickets_available if event.tickets_available else 0
-                        }} seats remaining
+                        <i class="bi bi-people-fill"></i> {{ event.tickets_available if event.tickets_available else 0 }} seats remaining
                     </p>
 
                     <div class="price-row d-flex justify-content-between align-items-center">
@@ -120,8 +152,8 @@
                             Free
                             {% endif %}
                         </span>
-                        <a href="{{ url_for('main.event_detail', event_id=event.id) }}"
-                            class="btn btn-outline-primary px-5 py-2">View Details</a>
+                        <a href="{{ url_for('home.event_detail', event_id=event.id) }}"
+                           class="btn btn-outline-primary px-4 py-2">View Details</a>
                     </div>
 
                 </div>
@@ -138,7 +170,7 @@
             {% if search_query %} for "<strong>{{ search_query }}</strong>"{% endif %}
             {% if request.args.get('genre') %} in <strong>{{ request.args.get('genre') }}</strong>{% endif %}.
         </p>
-        <a href="{{ url_for('main.create_event') }}" class="btn btn-primary">Create the first one</a>
+        <a href="{{ url_for('home.create_event') }}" class="btn btn-primary">Create the first one</a>
     </div>
     {% endif %}
 
