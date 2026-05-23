@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session, abort
 from flask_login import current_user
 from . forms import EventForm, CommentForm
-from . models import Event, Booking
+from . models import Event, Booking, Comment
 from . import db
 from datetime import datetime 
 from flask_login import login_required, current_user
