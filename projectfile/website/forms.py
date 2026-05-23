@@ -44,6 +44,12 @@ RATING_CHOICES = [
     ('MA15+', 'MA15+'),
     ('R18+', 'R18+'),
 ]
+
+ACKNOWLEDGEMENT_CHOICES = [
+    ('none',     'No Acknowledgement of Country'),
+    ('generic',  'Acknowledgement of Country: Generic'),
+    ('enhanced', 'Acknowledgement of Country: Enhanced'),
+]
  
 class EventForm(FlaskForm):
     title = StringField(
@@ -86,8 +92,19 @@ class EventForm(FlaskForm):
         "Movie Poster URL",
         validators=[Optional(), Length(max=255)]
     )
+
+    acknowledgement_type = SelectField(
+        "Acknowledgement of Country",
+        choices=ACKNOWLEDGEMENT_CHOICES, default='none'
+    )
+
+    acknowledgement_text = TextAreaField(
+        "Custom Acknowledgement Text (Enhanced only)",
+        validators=[Optional(), Length(max=20000)]
+    )
+
     submit = SubmitField("Create Event")
- 
+    
 class CommentForm(FlaskForm):
     text = TextAreaField("Comment", validators=[InputRequired(), Length(min=1, max=500)])
     submit = SubmitField("Post comment")
