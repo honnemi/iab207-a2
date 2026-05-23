@@ -22,8 +22,10 @@
                     <ul class="list-group list-group-flush mb-3">
                         <li class="list-group-item px-0">{{ booking.quantity }}x Ticket</li>
                     </ul>
-                    <p class="mt-auto"><b>Total:</b> ${{ "%.2f"|format(booking.quantity * booking.event.ticket_price) }}</p>
-                    <a href="{{ url_for('main.event_detail', event_id=booking.event.id) }}" class="btn btn-primary">View Event Details</a>
+                    <p class="mt-auto"><b>Total:</b> ${{ "%.2f"|format(booking.quantity * booking.event.ticket_price) }}
+                    </p>
+                    <a href="{{ url_for('main.event_detail', event_id=booking.event.id) }}" class="btn btn-primary">View
+                        Event Details</a>
                 </div>
             </div>
 
@@ -31,10 +33,13 @@
 
             {% else %}
 
-            <div class="container vh-100 d-flex justify-content-center align-items-center">
-                <h1 class="text-muted text-center">
-                    No bookings found
-                </h1>
+            <div class="text-center py-5">
+
+                <div style="font-size: 64px;">🙁</div>
+                <p class="text-muted fs-5 mt-3">
+                    You have no bookings yet.
+                </p>
+                <a href="{{ url_for('main.view_events') }}" class="btn btn-primary">Browse events here!</a>
             </div>
 
             {% endif %}
@@ -43,4 +48,4 @@
     </div>
 </div>
 
-    {% endblock %}
+{% endblock %}
