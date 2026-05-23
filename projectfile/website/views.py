@@ -139,7 +139,9 @@ def add_comment(event_id):
     event = Event.query.get_or_404(event_id)
     text = request.form.get('text', '').strip()
     if text:
-        new_comment = Comment(text=text, user_id=current_user, event_id=event.id)
+        new_comment = Comment(text=text, 
+                              user_id=current_user.id if current_user.is_authenticated else None, 
+                              event_id=event.id)
         db.session.add(new_comment)
         db.session.commit()
         flash('Comment posted!')
