@@ -59,13 +59,12 @@
 
 <div class="container mb-5">
 
-    <!-- Page header -->
+
     <div class="d-flex align-items-center justify-content-between mb-4">
         <h2 class="mb-0">All Events</h2>
         <a href="{{ url_for('home.create_event') }}" class="btn btn-primary">+ Create Event</a>
     </div>
 
-    <!-- Genre filter -->
     <div class="mb-4">
         <a href="{{ url_for('home.view_events') }}"
            class="btn btn-sm {% if not request.args.get('genre') %}btn-dark{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
@@ -153,7 +152,7 @@
                             {% endif %}
                         </span>
                         <a href="{{ url_for('home.event_detail', event_id=event.id) }}"
-                           class="btn btn-outline-primary px-4 py-2">View Details</a>
+                           class="btn btn-outline-primary px-5 py-2">View Details</a>
                     </div>
 
                 </div>
