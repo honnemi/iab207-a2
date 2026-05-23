@@ -1,0 +1,70 @@
+body {
+    font-family: "Quicksand", sans-serif !important;
+    font-weight: 400;
+    background: #F0EBE7;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, a, li, span, .navbar-brand {
+    color: #2F2A26;
+}
+
+header, h1, h2, h3, h4, h5, h6 {
+    font-family: "Momo Trust Display", sans-serif !important;
+    font-weight: 400;
+}
+
+.btn, .btn-outline-primary, .btn-outline-secondary {
+    background-color: #A7B7A1;
+    color: #2F2A26;
+    border: none;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 700;
+}
+
+.btn:hover, .btn-outline-primary:hover, .btn-outline-secondary:hover {
+    background-color: #94A78F;
+}
+
+.btn:active,
+.btn-outline-primary:active,
+.btn-outline-secondary:active {
+    background-color: #7f967f !important;   /* darker pressed look */
+    transform: scale(0.97);      /* subtle press effect */
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: rgba(167, 183, 161, 0.15);
+    color: #2F2A26;
+}
+
+.navbar, footer {
+    background: #DBD4CE !important;
+    padding: 10px;
+    backdrop-filter: blur()
+}
+
+.navbar li {
+    list-style: none;
+    padding: 10px;
+    color: #2F2A26;
+}
+
+.card, .detail-card {
+    background-color: #F5F5F5;
+    color: #2F2A26 !important; 
+}
+
+.card li {
+    background-color: #F5F5F5;
+}
+
+#ticket-box {
+    background-color: #F5F5F5;
+    color: #2F2A26 !important; 
+    border-color: #94A78F !important;
+}
+
+#ticket-price {
+    color: #2F2A26 !important; 
+}
