@@ -6,7 +6,7 @@ from flask_wtf.file import FileField, FileAllowed
 
 # creates the login information
 class LoginForm(FlaskForm):
-    user_name=StringField("Full Name", validators=[InputRequired('Enter user name')])
+    email=StringField("Email", validators=[InputRequired(), Email("Enter email")])
     password=PasswordField("Password", validators=[InputRequired('Enter user password')])
     submit = SubmitField("Login")
 

@@ -15,11 +15,11 @@ def login():
     login_form = LoginForm()
     error = None
     if login_form.validate_on_submit():
-        user_name = login_form.user_name.data
+        email = login_form.email.data
         password = login_form.password.data
-        user = db.session.scalar(db.select(User).where(User.name==user_name))
+        user = db.session.scalar(db.select(User).where(User.email==email))
         if user is None:
-            error = 'Incorrect user name'
+            error = 'Incorrect email address'
         elif not check_password_hash(user.password_hash, password): # takes the hash and cleartext password
             error = 'Incorrect password'
         if error is None:
