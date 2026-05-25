@@ -11,7 +11,4 @@ def show_about():
         flash('Thanks for your submission!', 'success')
         return redirect(url_for('about.show_about'))
 
-    if contact_form.is_submitted():
-        flash('An error occurred. Please try again.', 'danger')
-
     return render_template('about_us.html', form=contact_form)

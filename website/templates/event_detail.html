@@ -14,10 +14,10 @@
         <div class="col-md-4">
             {% if event.image %}
             <img src="{{ url_for('static', filename='images/' + event.image) }}" alt="{{ event.title }}"
-                class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
+                 class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
             {% else %}
             <div class="bg-light rounded d-flex align-items-center justify-content-center h-100"
-                style="min-height: 300px; font-size: 72px;">🎬</div>
+                 style="min-height: 300px; font-size: 72px;">🎬</div>
             {% endif %}
         </div>
 
@@ -44,15 +44,19 @@
                 <div class="col-6 col-md-3">
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Date</div>
-                        <div class="fw-semibold small">{{ event.date.strftime('%d %b %Y') if event.date else 'TBC' }}
+                        <div class="fw-semibold small">
+                            {{ event.date.strftime('%d %b %Y') if event.date else 'TBC' }}
                         </div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Time</div>
-                        <div class="fw-semibold small">{{ event.date.strftime('%I:%M %p').lstrip('0') if event.date
-                            else 'TBC' }}
+                        <div class="fw-semibold small">
+                            {{
+ event.date.strftime('%I:%M %p').lstrip('0') if event.date
+                            else 'TBC'
+                            }}
                         </div>
                     </div>
                 </div>
@@ -83,47 +87,25 @@
                         </div>
                         <div class="text-end">
                             {% if event.tickets_available and event.tickets_available > 0 %}
-                            {% if event.tickets_available < 10 %} <span class="text-warning fw-semibold">⚠ Only {{
-                                event.tickets_available }} left!</span>
-                                {% else %}
-                                <span class="text-muted">{{ event.tickets_available }} tickets available</span>
-                                {% endif %}
-                                {% else %}
-                                <span class="text-danger fw-semibold">Sold out</span>
-                                {% endif %}
+                            {% if event.tickets_available < 10 %} <span class="text-warning fw-semibold">
+                                ⚠ Only {{
+                                event.tickets_available
+                                }} left!
+                            </span>
+                            {% else %}
+                            <span class="text-muted">{{ event.tickets_available }} tickets available</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-danger fw-semibold">Sold out</span>
+                            {% endif %}
                         </div>
                     </div>
-
-                    {% if event.tickets_available and event.tickets_available > 0 %}
-                    <!-- Quantity selector -->
-                    <form method="POST">
-                        <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="input-group" style="width: 130px;">
-                                <button class="btn btn-outline-secondary" type="submit" name="action"
-                                    value="decrease">−</button>
-                                <input type="text" class="form-control text-center" value="{{ quantity }}" readonly>
-                                <button class="btn btn-outline-secondary" type="submit" name="action"
-                                    value="increase">+</button>
-                            </div>
-                            <span class="text-muted">
-                                Total: <strong>
-                                    {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price * quantity) }}{%
-                                    else %}Free{% endif %}
-                                </strong>
-                            </span>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary btn-lg mt-4" name="action" value="checkout">
-                                Buy Tickets
-                            </button>
-                        </div>
-
-                        {% else %}
-                        <div class="d-grid">
-                            <button class="btn btn-secondary btn-lg" disabled>Sold Out</button>
-                        </div>
-                        {% endif %}
-                    </form>
+                    <div class="d-grid">
+                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}"
+                           class="btn btn-primary btn-lg">
+                            Buy Tickets
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -172,7 +154,7 @@
                         {{ comment_form.hidden_tag() }}
                         <div class="mb-2">
                             <textarea class="form-control" name="text" rows="3"
-                                placeholder="Leave a comment..."></textarea>
+                                      placeholder="Leave a comment..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-outline-primary btn-sm mt-4">Post Comment</button>
                     </form>
