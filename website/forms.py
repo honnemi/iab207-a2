@@ -109,3 +109,8 @@ class EventForm(FlaskForm):
 class CommentForm(FlaskForm):
     text = TextAreaField("Comment", validators=[InputRequired(), Length(min=1, max=500)])
     submit = SubmitField("Post comment")
+
+class ContactForm(FlaskForm):
+    email=StringField("Email", validators=[InputRequired(), Email("Enter email")])
+    text=TextAreaField("Text", validators=[InputRequired(), Length(min=1, max=500)])
+    submit = SubmitField("Submit")

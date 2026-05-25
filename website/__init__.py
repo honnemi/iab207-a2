@@ -28,10 +28,11 @@ def create_app():
        print("LOAD USER CALLED:", user_id)
        return db.session.scalar(db.select(User).where(User.id==user_id))
 
-    from . import home, bookings, auth
+    from . import home, bookings, auth, about
     app.register_blueprint(home.home_bp)
     app.register_blueprint(bookings.bookings_bp)
     app.register_blueprint(auth.auth_bp)
+    app.register_blueprint(about.about_bp)
 
     return app
 
