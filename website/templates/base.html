@@ -36,14 +36,20 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{url_for('home.view_events')}}">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('home.create_event')}}">Create Event</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">About Us</a>
+                        </li>
                     </ul>
 
-                    <ul class="navbar-nav ms-auto align-items-center">
+                    <ul class="navbar-nav ms-lg-auto align-items-lg-center">
 
                         {% if current_user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                               aria-expanded="false">
                                 Welcome back, {{ current_user.name }}!
                             </a>
 
@@ -66,7 +72,7 @@
                             <a class="btn btn-primary btn-sm" href="{{ url_for('auth.login') }}">
                                 Login/Register
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-person-fill" viewBox="0 0 16 16">
+                                     class="bi bi-person-fill" viewBox="0 0 16 16">
                                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                                 </svg>
                             </a>
