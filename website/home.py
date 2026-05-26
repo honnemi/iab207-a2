@@ -86,6 +86,15 @@ def create_event():
 def event_detail(event_id):
     event = Event.query.get_or_404(event_id)
     comment_form = CommentForm()
+    comments = Comment.query.filter_by(event_id = event_id)\
+                            .order_by(Comment.created_at.desc()).all()
+    
+    return render_template('event_detail.html', event=event, comment_form=comment_form, comments=comments)
+
+@home_bp.route('/events/<int:event_id>/tickets', methods=['GET', 'POST'])
+@login_required
+def buy_tickets(event_id):
+    event = Event.query.get_or_404(event_id)
 
     if "cart" not in session:
         session["cart"] = {}
@@ -126,13 +135,11 @@ def event_detail(event_id):
 
         cart[key] = qty
         session["cart"] = cart
-        return redirect(url_for("home.event_detail", event_id=event_id))
+        return redirect(url_for("home.buy_tickets", event_id=event_id))
 
     quantity = cart[key]
-    comments = Comment.query.filter_by(event_id = event_id)\
-                            .order_by(Comment.created_at.desc()).all()
     
-    return render_template('event_detail.html', event=event, comment_form=comment_form, quantity=quantity, comments=comments)
+    return render_template('tickets.html', event=event, quantity=quantity)
 
 @home_bp.route('/events/<int:event_id>/comment', methods=['POST'])
 def add_comment(event_id):

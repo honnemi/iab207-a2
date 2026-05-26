@@ -14,10 +14,10 @@
         <div class="col-md-4">
             {% if event.image %}
             <img src="{{ url_for('static', filename='images/' + event.image) }}" alt="{{ event.title }}"
-                class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
+                 class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
             {% else %}
             <div class="bg-light rounded d-flex align-items-center justify-content-center h-100"
-                style="min-height: 300px; font-size: 72px;">🎬</div>
+                 style="min-height: 300px; font-size: 72px;">🎬</div>
             {% endif %}
         </div>
 
@@ -54,7 +54,11 @@
                         <div class="text-muted small">Time</div>
                         <div class="fw-semibold small">
                             {{
+<<<<<<< HEAD
                             event.date.strftime('%I:%M %p').lstrip('0') if event.date
+=======
+ event.date.strftime('%I:%M %p').lstrip('0') if event.date
+>>>>>>> 395e97326a3c1bff01712798feb2ddbfcf39df91
                             else 'TBC'
                             }}
                         </div>
@@ -91,6 +95,7 @@
                                 ⚠ Only {{
                                 event.tickets_available
                                 }} left!
+<<<<<<< HEAD
                                 </span>
                                 {% else %}
                                 <span class="text-muted">{{ event.tickets_available }} tickets available</span>
@@ -102,6 +107,20 @@
                     </div>
                     <div class="d-grid">
                         <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}" class="btn btn-primary btn-lg">
+=======
+                            </span>
+                            {% else %}
+                            <span class="text-muted">{{ event.tickets_available }} tickets available</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-danger fw-semibold">Sold out</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}"
+                           class="btn btn-primary btn-lg">
+>>>>>>> 395e97326a3c1bff01712798feb2ddbfcf39df91
                             Buy Tickets
                         </a>
                     </div>
@@ -153,7 +172,7 @@
                         {{ comment_form.hidden_tag() }}
                         <div class="mb-2">
                             <textarea class="form-control" name="text" rows="3"
-                                placeholder="Leave a comment..."></textarea>
+                                      placeholder="Leave a comment..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-outline-primary btn-sm mt-4">Post Comment</button>
                     </form>
