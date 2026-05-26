@@ -146,7 +146,50 @@
             </div>
         </div>
     </div>
+    <!-- Acknowledgement of Country -->
+    <div class="row mt-0">
+        <div class="col-12">
+            <div class="card mb-4 shadow-sm border-0" style="background-color: #f9f3ec;">
+                <div class="card-body">
+                    <h5 class="card-title"> Acknowledgement of Country</h5>
 
+                    {% if event.acknowledgement_type == 'none' or not event.acknowledgement_type %}
+                    <p class="card-text text-muted">
+                        No Acknowledgement of Country 
+                    </p>
+                    <div class="text-muted mt-2" style="font-size: 0.8rem;">
+                        <em>The event organiser has not included an Acknowledgement of Country for this event.</em>
+                    </div>
+
+                    {% elif event.acknowledgement_type == 'generic' %}
+                    <p class="card-text text-muted">
+                        Generic 
+                    </p>
+                    <div class="text-muted mt-2" style="font-size: 0.8rem;">
+                        <em>We acknowledge the Traditional Custodians of the land on which this event takes place
+                        and pay our respects to their Elders past, present and emerging. We recognise their
+                        continuing connection to land, waters and community.</em>
+                    </div>
+
+                    {% elif event.acknowledgement_type == 'enhanced' %}
+                    {% if event.acknowledgement_text %}
+                    <p class="card-text text-muted">{{ event.acknowledgement_text }}</p>
+                    {% else %}
+                    <p class="card-text text-muted">
+                        Enhanced 
+                    </p>
+                    {% endif %}
+                    <div class="text-muted mt-2" style="font-size: 0.8rem;">
+                        <em>We acknowledge the Traditional Custodians of the land on which this event takes place
+                        and pay our respects to their Elders past, present and emerging. We recognise their
+                        continuing connection to land, waters and community.</em>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Comments -->
     <div class="row">
         <div class="col-12">
