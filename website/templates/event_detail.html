@@ -14,10 +14,10 @@
         <div class="col-md-4">
             {% if event.image %}
             <img src="{{ url_for('static', filename='images/' + event.image) }}" alt="{{ event.title }}"
-                 class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
+                class="rounded shadow-sm w-100 h-100" style="object-fit: cover; max-height: 500px; min-height: 300px;">
             {% else %}
             <div class="bg-light rounded d-flex align-items-center justify-content-center h-100"
-                 style="min-height: 300px; font-size: 72px;">🎬</div>
+                style="min-height: 300px; font-size: 72px;">🎬</div>
             {% endif %}
         </div>
 
@@ -37,6 +37,16 @@
                 {% if event.rating %}
                 <span class="badge bg-secondary fs-6">{{ event.rating }}</span>
                 {% endif %}
+                {% if event.status == 'Cancelled' %}
+                <span class="badge bg-danger fs-6">Cancelled</span>
+                {% elif event.status == 'Sold Out' %}
+                <span class="badge bg-warning text-dark fs-6">Sold Out</span>
+                {% elif event.status == 'Inactive' %}
+                <span class="badge bg-secondary fs-6">Past Event</span>
+                {% else %}
+                <span class="badge bg-success fs-6">Open</span>
+                {% endif %}
+
             </div>
 
             <!-- Meta row -->
@@ -54,7 +64,7 @@
                         <div class="text-muted small">Time</div>
                         <div class="fw-semibold small">
                             {{
- event.date.strftime('%I:%M %p').lstrip('0') if event.date
+                            event.date.strftime('%I:%M %p').lstrip('0') if event.date
                             else 'TBC'
                             }}
                         </div>
@@ -70,6 +80,22 @@
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Rating</div>
                         <div class="fw-semibold small">{{ event.rating if event.rating else '—' }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="detail-card border rounded p-2 text-center shadow-sm">
+                        <div class="text-muted small">Status</div>
+                        <div class="fw-semibold small">
+                            {% if event.status == 'Cancelled' %}
+                            <span class="text-danger">Cancelled</span>
+                            {% elif event.status == 'Sold Out' %}
+                            <span class="text-warning">Sold Out</span>
+                            {% elif event.status == 'Inactive' %}
+                            <span class="text-secondary">Past Event</span>
+                            {% else %}
+                            <span style="color:#1db954;">Open</span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,18 +117,17 @@
                                 ⚠ Only {{
                                 event.tickets_available
                                 }} left!
-                            </span>
-                            {% else %}
-                            <span class="text-muted">{{ event.tickets_available }} tickets available</span>
-                            {% endif %}
-                            {% else %}
-                            <span class="text-danger fw-semibold">Sold out</span>
-                            {% endif %}
+                                </span>
+                                {% else %}
+                                <span class="text-muted">{{ event.tickets_available }} tickets available</span>
+                                {% endif %}
+                                {% else %}
+                                <span class="text-danger fw-semibold">Sold out</span>
+                                {% endif %}
                         </div>
                     </div>
                     <div class="d-grid">
-                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}"
-                           class="btn btn-primary btn-lg">
+                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}" class="btn btn-primary btn-lg">
                             Buy Tickets
                         </a>
                     </div>
@@ -154,7 +179,7 @@
                         {{ comment_form.hidden_tag() }}
                         <div class="mb-2">
                             <textarea class="form-control" name="text" rows="3"
-                                      placeholder="Leave a comment..."></textarea>
+                                placeholder="Leave a comment..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-outline-primary btn-sm mt-4">Post Comment</button>
                     </form>
