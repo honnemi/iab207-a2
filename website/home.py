@@ -34,6 +34,7 @@ def view_events():
 
 
 @home_bp.route('/events/create', methods=['GET', 'POST'])
+@login_required
 def create_event():
     form = EventForm()
  
