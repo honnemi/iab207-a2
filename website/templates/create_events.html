@@ -2,8 +2,14 @@
 {% block content %}
 
 <div class="container mt-5" style="max-width: 650px;">
+    {% if event is defined and event %}
+    <h2 class="mb-1">Update your Event</h2>
+    <p class="text-muted mb-4">No matching results, press enter to execute your custom prompt extend it to one sentence.
+Please take a moment to update your event details to ensure everything is accurate and up-to-date.</p>
+    {% else %}
     <h2 class="mb-1">Create Event</h2>
     <p class="text-muted mb-4">Host a movie night for your community</p>
+    {% endif %}
 
     <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
@@ -131,7 +137,11 @@
         </div>
 
         <div class="d-grid">
+            {% if event is defined and event %}
+            {{ form.submit(class="btn btn-primary btn-lg", value="Update Event") }}
+            {% else %}
             {{ form.submit(class="btn btn-primary btn-lg") }}
+            {% endif %}
         </div>
     </form>
 </div>
