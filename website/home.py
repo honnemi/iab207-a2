@@ -71,7 +71,7 @@ def create_event():
             location=form.location.data,
             date=event_date,
             image=image_filename,
-            owner_id =None,
+            owner_id =current_user.id,
             acknowledgement_type=form.acknowledgement_type.data,
             acknowledgement_text=form.acknowledgement_text.data or None
 
@@ -203,11 +203,27 @@ def edit_event(event_id):
 @login_required
 def cancel_event(event_id):
     event = Event.query.get_or_404(event_id)
-
     if event.owner_id != current_user.id:
         abort(403)
-
     event.is_cancelled = True
     db.session.commit()
-    flash('Event has been cancelled.')
-    return redirect(url_for('home.event_detail', event_id=event_id))
+    flash(f'"{event.title}" has been cancelled.', 'success')
+    return redirect(url_for('home.my_events'))  
+
+@home_bp.route('/my-events')
+@login_required
+def my_events():
+    events = Event.query.filter_by(owner_id=current_user.id)\
+                        .order_by(Event.date.asc()).all()
+    return render_template('my_events.html', events=events)
+
+@home_bp.route('/events/<int:event_id>/cancel-confirm')
+@login_required
+def cancel_confirm(event_id):
+    event = Event.query.get_or_404(event_id)
+    if event.owner_id != current_user.id:
+        abort(403)
+    if event.is_cancelled:
+        flash('This event is already cancelled.', 'info')
+        return redirect(url_for('home.event_detail', event_id=event_id))
+    return render_template('cancel_confirm.html', event=event)
