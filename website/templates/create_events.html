@@ -3,9 +3,8 @@
 
 <div class="container mt-5" style="max-width: 650px;">
     {% if event is defined and event %}
-    <h2 class="mb-1">Update your Event</h2>
-    <p class="text-muted mb-4">No matching results, press enter to execute your custom prompt extend it to one sentence.
-Please take a moment to update your event details to ensure everything is accurate and up-to-date.</p>
+    <h2 class="mb-1">Edit Event</h2>
+    <p class="text-muted mb-4">Update your event details below.</p>
     {% else %}
     <h2 class="mb-1">Create Event</h2>
     <p class="text-muted mb-4">Host a movie night for your community</p>
@@ -77,8 +76,7 @@ Please take a moment to update your event details to ensure everything is accura
         </div>
 
         <!-- Location & Time -->
-        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time
-        </h6>
+        <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Location & Time</h6>
 
         <div class="mb-3">
             {{ form.location.label(class="form-label fw-semibold") }}
@@ -96,6 +94,7 @@ Please take a moment to update your event details to ensure everything is accura
             {% endfor %}
         </div>
 
+        <!-- Acknowledgement -->
         <h6 class="text-uppercase text-muted mt-4 mb-3" style="font-size: 11px; letter-spacing: 1px;">
             Acknowledgement of Country
         </h6>
@@ -105,8 +104,7 @@ Please take a moment to update your event details to ensure everything is accura
             {{ form.acknowledgement_type(class="form-select", id="ack-select") }}
             <div class="form-text text-muted mt-1">
                 An Acknowledgement of Country recognises the Traditional Custodians of the land
-                where your event is held and their enduring connection to Country. It is an important
-                part of reconciliation in Australia.
+                where your event is held and their enduring connection to Country.
             </div>
         </div>
 
@@ -119,8 +117,7 @@ Please take a moment to update your event details to ensure everything is accura
                 <a href="https://www.knowyourcountry.com.au" target="_blank">Know Your Country</a>.
             </div>
             {{ form.acknowledgement_text(class="form-control", rows=4,
-            placeholder="e.g. I acknowledge the Turrbal and Jagera peoples as Traditional Custodians of this land...")
-            }}
+            placeholder="e.g. I acknowledge the Turrbal and Jagera peoples as Traditional Custodians of this land...") }}
             {% for error in form.acknowledgement_text.errors %}
             <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
@@ -128,17 +125,26 @@ Please take a moment to update your event details to ensure everything is accura
 
         <!-- Poster -->
         <h6 class="text-uppercase text-muted mt-2 mb-3" style="font-size: 11px; letter-spacing: 1px;">Movie Poster</h6>
-        <div class="mb-5">
+        <div class="mb-3">
             {{ form.image.label(class="form-label fw-semibold") }}
+            {% if event is defined and event and event.image %}
+            <div class="mb-2">
+                <img src="{{ url_for('static', filename='images/' + event.image) }}"
+                     alt="Current poster" style="height: 80px; border-radius: 6px; object-fit: cover;">
+                <span class="text-muted small ms-2">Current poster — upload a new one to replace it</span>
+            </div>
+            {% endif %}
             {{ form.image(class="form-control") }}
             {% for error in form.image.errors %}
             <div class="text-danger small mt-1">{{ error }}</div>
             {% endfor %}
         </div>
 
-        <div class="d-grid">
+        <div class="d-grid gap-2 mt-5 mb-5">
             {% if event is defined and event %}
-            {{ form.submit(class="btn btn-primary btn-lg", value="Update Event") }}
+            {{ form.submit(class="btn btn-primary btn-lg", value="Save Changes") }}
+            <a href="{{ url_for('home.event_detail', event_id=event.id) }}"
+               class="btn btn-outline-secondary btn-lg">Cancel</a>
             {% else %}
             {{ form.submit(class="btn btn-primary btn-lg") }}
             {% endif %}

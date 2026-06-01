@@ -46,8 +46,25 @@
                 {% else %}
                 <span class="badge bg-success fs-6">Open</span>
                 {% endif %}
-
             </div>
+
+            <!-- Owner actions: chỉ hiện nếu là người tạo event -->
+            {% if current_user.is_authenticated and event.owner_id == current_user.id %}
+            <div class="d-flex gap-2 mb-4">
+                {% if not event.is_cancelled %}
+                <a href="{{ url_for('home.edit_event', event_id=event.id) }}"
+                   class="btn btn-outline-secondary btn-sm px-3">
+                    ✏️ Edit Event
+                </a>
+                <a href="{{ url_for('home.cancel_confirm', event_id=event.id) }}"
+                   class="btn btn-outline-danger btn-sm px-3">
+                    🚫 Cancel Event
+                </a>
+                {% else %}
+                <span class="badge bg-danger px-3 py-2">This event has been cancelled</span>
+                {% endif %}
+            </div>
+            {% endif %}
 
             <!-- Meta row -->
             <div class="row g-2 mb-4">
@@ -63,10 +80,7 @@
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Time</div>
                         <div class="fw-semibold small">
-                            {{
-                            event.date.strftime('%I:%M %p').lstrip('0') if event.date
-                            else 'TBC'
-                            }}
+                            {{ event.date.strftime('%I:%M %p').lstrip('0') if event.date else 'TBC' }}
                         </div>
                     </div>
                 </div>
@@ -102,28 +116,24 @@
 
             <!-- Ticket box -->
             <div id="ticket-box" class="card border-primary mb-4 shadow-sm">
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
                             <div class="ticket-price fs-2 fw-bold text-primary">
-                                {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{%
-                                endif %}
+                                {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
                             </div>
                             <div class="text-muted small">per ticket</div>
                         </div>
                         <div class="text-end">
                             {% if event.tickets_available and event.tickets_available > 0 %}
-                            {% if event.tickets_available < 10 %} <span class="text-warning fw-semibold">
-                                ⚠ Only {{
-                                event.tickets_available
-                                }} left!
-                                </span>
+                                {% if event.tickets_available < 10 %}
+                                <span class="text-warning fw-semibold">⚠ Only {{ event.tickets_available }} left!</span>
                                 {% else %}
                                 <span class="text-muted">{{ event.tickets_available }} tickets available</span>
                                 {% endif %}
-                                {% else %}
-                                <span class="text-danger fw-semibold">Sold out</span>
-                                {% endif %}
+                            {% else %}
+                            <span class="text-danger fw-semibold">Sold out</span>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="d-grid">
@@ -135,6 +145,7 @@
             </div>
         </div>
     </div>
+
     <!-- Description -->
     <div class="row mt-4">
         <div class="col-12">
@@ -146,25 +157,22 @@
             </div>
         </div>
     </div>
+
     <!-- Acknowledgement of Country -->
     <div class="row mt-0">
         <div class="col-12">
             <div class="card mb-4 shadow-sm border-0" style="background-color: #f9f3ec;">
                 <div class="card-body">
-                    <h5 class="card-title"> Acknowledgement of Country</h5>
+                    <h5 class="card-title">Acknowledgement of Country</h5>
 
                     {% if event.acknowledgement_type == 'none' or not event.acknowledgement_type %}
-                    <p class="card-text text-muted">
-                        No Acknowledgement of Country 
-                    </p>
+                    <p class="card-text text-muted">No Acknowledgement of Country</p>
                     <div class="text-muted mt-2" style="font-size: 0.8rem;">
                         <em>The event organiser has not included an Acknowledgement of Country for this event.</em>
                     </div>
 
                     {% elif event.acknowledgement_type == 'generic' %}
-                    <p class="card-text text-muted">
-                        Generic 
-                    </p>
+                    <p class="card-text text-muted">Generic</p>
                     <div class="text-muted mt-2" style="font-size: 0.8rem;">
                         <em>We acknowledge the Traditional Custodians of the land on which this event takes place
                         and pay our respects to their Elders past, present and emerging. We recognise their
@@ -175,9 +183,7 @@
                     {% if event.acknowledgement_text %}
                     <p class="card-text text-muted">{{ event.acknowledgement_text }}</p>
                     {% else %}
-                    <p class="card-text text-muted">
-                        Enhanced 
-                    </p>
+                    <p class="card-text text-muted">Enhanced</p>
                     {% endif %}
                     <div class="text-muted mt-2" style="font-size: 0.8rem;">
                         <em>We acknowledge the Traditional Custodians of the land on which this event takes place
@@ -185,11 +191,11 @@
                         continuing connection to land, waters and community.</em>
                     </div>
                     {% endif %}
-
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Comments -->
     <div class="row">
         <div class="col-12">
@@ -200,14 +206,8 @@
                     {% if event.comments %}
                     {% for comment in event.comments %}
                     <div class="border-bottom pb-3 mb-3">
-                        <div class="fw-semibold small mb-1">
-                            {{ comment.user.name }}
-                        </div>
-
-                        <p class="text-muted small mb-1">
-                            {{ comment.text }}
-                        </p>
-
+                        <div class="fw-semibold small mb-1">{{ comment.user.name }}</div>
+                        <p class="text-muted small mb-1">{{ comment.text }}</p>
                         <div class="text-muted" style="font-size: 0.75rem;">
                             {{ comment.created_at.strftime('%d/%m/%Y %I:%M %p') }}
                         </div>
