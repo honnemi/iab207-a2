@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
  # this is the registration form
 class RegisterForm(FlaskForm):
     user_name=StringField("Full Name", validators=[InputRequired()])
-    contact_number=StringField("Contact Number", validators=[InputRequired()])
+    contact_number=StringField("Contact Number", validators=[InputRequired(), Regexp(r'^[0-9]+$', message="Please enter a valid contact number")])
     street_address=StringField("Street Address", validators=[InputRequired()])
     email = StringField("Email Address", validators=[InputRequired(),Email("Please enter a valid email")])
     # linking two fields - password should be equal to data entered in confirm
