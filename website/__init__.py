@@ -25,8 +25,7 @@ def create_app():
     from .models import User
     @login_manager.user_loader
     def load_user(user_id):
-       print("LOAD USER CALLED:", user_id)
-       return db.session.scalar(db.select(User).where(User.id==user_id))
+        return db.session.scalar(db.select(User).where(User.id==user_id))
 
     from . import home, bookings, auth, about
     app.register_blueprint(home.home_bp)
@@ -35,4 +34,3 @@ def create_app():
     app.register_blueprint(about.about_bp)
 
     return app
-

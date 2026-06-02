@@ -5,12 +5,9 @@ from .models import User
 from .forms import LoginForm, RegisterForm
 from . import db
 
-# Create a blueprint - make sure all BPs have unique names
 auth_bp = Blueprint('auth', __name__)
 
-# this is a hint for a login function
 @auth_bp.route('/login', methods=['GET', 'POST'])
-# view function
 def login():
     login_form = LoginForm()
     error = None
@@ -20,12 +17,11 @@ def login():
         user = db.session.scalar(db.select(User).where(User.email==email))
         if user is None:
             error = 'Incorrect email address'
-        elif not check_password_hash(user.password_hash, password): # takes the hash and cleartext password
+        elif not check_password_hash(user.password_hash, password):
             error = 'Incorrect password'
         if error is None:
             login_user(user)
-            nextp = request.args.get('next') # this gives the url from where the login page was accessed
-            print(nextp)
+            nextp = request.args.get('next')
             if nextp is None or not nextp.startswith('/'):
                 return redirect(url_for('home.view_events'))
             return redirect(nextp)
@@ -43,18 +39,18 @@ def register():
         street_address = register_form.street_address.data
         email = register_form.email.data
         password = register_form.password.data
-        existing_user = db.session.scalar(db.select(User).where(User.email==email)) 
+        existing_user = db.session.scalar(db.select(User).where(User.email==email))
         if existing_user:
             error = 'Email already registered'
         else:
             password_hash = generate_password_hash(password)
-            new_user = User (name=user_name, contact_number=contact_number, street_address=street_address, email=email, password_hash=password_hash)
+            new_user = User(name=user_name, contact_number=contact_number, street_address=street_address, email=email, password_hash=password_hash)
             db.session.add(new_user)
             db.session.commit()
             flash('Registration successful. Please log in.')
             return redirect(url_for('auth.login'))
         flash(error, 'danger')
-    return render_template ('user.html', form=register_form, heading='Register')
+    return render_template('user.html', form=register_form, heading='Register')
 
 @auth_bp.route('/logout')
 @login_required

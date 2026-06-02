@@ -39,27 +39,19 @@
                 {% endif %}
                 {% if event.status == 'Cancelled' %}
                 <span class="badge bg-danger fs-6">Cancelled</span>
-                {% elif event.status == 'Sold Out' %}
-                <span class="badge bg-warning text-dark fs-6">Sold Out</span>
-                {% elif event.status == 'Inactive' %}
-                <span class="badge bg-secondary fs-6">Past Event</span>
                 {% else %}
                 <span class="badge bg-success fs-6">Open</span>
                 {% endif %}
             </div>
 
-            <!-- Owner actions: chỉ hiện nếu là người tạo event -->
+            <!-- Owner actions -->
             {% if current_user.is_authenticated and event.owner_id == current_user.id %}
             <div class="d-flex gap-2 mb-4">
-                {% if not event.is_cancelled %}
+                {% if event.status == 'Open' %}
                 <a href="{{ url_for('home.edit_event', event_id=event.id) }}"
-                   class="btn btn-outline-secondary btn-sm px-3">
-                    ✏️ Edit Event
-                </a>
+                   class="btn btn-outline-secondary btn-sm px-3">✏️ Edit Event</a>
                 <a href="{{ url_for('home.cancel_confirm', event_id=event.id) }}"
-                   class="btn btn-outline-danger btn-sm px-3">
-                    🚫 Cancel Event
-                </a>
+                   class="btn btn-outline-danger btn-sm px-3">🚫 Cancel Event</a>
                 {% else %}
                 <span class="badge bg-danger px-3 py-2">This event has been cancelled</span>
                 {% endif %}
@@ -71,17 +63,13 @@
                 <div class="col-6 col-md-3">
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Date</div>
-                        <div class="fw-semibold small">
-                            {{ event.date.strftime('%d %b %Y') if event.date else 'TBC' }}
-                        </div>
+                        <div class="fw-semibold small">{{ event.date.strftime('%d %b %Y') if event.date else 'TBC' }}</div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
                     <div class="detail-card border rounded p-2 text-center shadow-sm">
                         <div class="text-muted small">Time</div>
-                        <div class="fw-semibold small">
-                            {{ event.date.strftime('%I:%M %p').lstrip('0') if event.date else 'TBC' }}
-                        </div>
+                        <div class="fw-semibold small">{{ event.date.strftime('%I:%M %p').lstrip('0') if event.date else 'TBC' }}</div>
                     </div>
                 </div>
                 <div class="col-6 col-md-3">
@@ -102,10 +90,6 @@
                         <div class="fw-semibold small">
                             {% if event.status == 'Cancelled' %}
                             <span class="text-danger">Cancelled</span>
-                            {% elif event.status == 'Sold Out' %}
-                            <span class="text-warning">Sold Out</span>
-                            {% elif event.status == 'Inactive' %}
-                            <span class="text-secondary">Past Event</span>
                             {% else %}
                             <span style="color:#1db954;">Open</span>
                             {% endif %}
@@ -115,31 +99,36 @@
             </div>
 
             <!-- Ticket box -->
-            <div id="ticket-box" class="card border-primary mb-4 shadow-sm">
+            <div id="ticket-box" class="card mb-4 shadow-sm
+                {% if event.status == 'Cancelled' %}border-secondary{% else %}border-primary{% endif %}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <div class="ticket-price fs-2 fw-bold text-primary">
+                            <div class="ticket-price fs-2 fw-bold
+                                {% if event.status == 'Cancelled' %}text-secondary{% else %}text-primary{% endif %}">
                                 {% if event.ticket_price %}${{ "%.2f"|format(event.ticket_price) }}{% else %}Free{% endif %}
                             </div>
                             <div class="text-muted small">per ticket</div>
                         </div>
                         <div class="text-end">
-                            {% if event.tickets_available and event.tickets_available > 0 %}
+                            {% if event.status == 'Cancelled' %}
+                            <span class="text-danger fw-semibold">Event cancelled</span>
+                            {% elif event.tickets_available and event.tickets_available > 0 %}
                                 {% if event.tickets_available < 10 %}
                                 <span class="text-warning fw-semibold">⚠ Only {{ event.tickets_available }} left!</span>
                                 {% else %}
                                 <span class="text-muted">{{ event.tickets_available }} tickets available</span>
                                 {% endif %}
-                            {% else %}
-                            <span class="text-danger fw-semibold">Sold out</span>
                             {% endif %}
                         </div>
                     </div>
                     <div class="d-grid">
-                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}" class="btn btn-primary btn-lg">
-                            Buy Tickets
-                        </a>
+                        {% if event.status == 'Open' %}
+                        <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}"
+                           class="btn btn-primary btn-lg">Buy Tickets</a>
+                        {% else %}
+                        <button class="btn btn-danger btn-lg" disabled>Event Cancelled</button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -164,13 +153,11 @@
             <div class="card mb-4 shadow-sm border-0" style="background-color: #f9f3ec;">
                 <div class="card-body">
                     <h5 class="card-title">Acknowledgement of Country</h5>
-
                     {% if event.acknowledgement_type == 'none' or not event.acknowledgement_type %}
                     <p class="card-text text-muted">No Acknowledgement of Country</p>
                     <div class="text-muted mt-2" style="font-size: 0.8rem;">
                         <em>The event organiser has not included an Acknowledgement of Country for this event.</em>
                     </div>
-
                     {% elif event.acknowledgement_type == 'generic' %}
                     <p class="card-text text-muted">Generic</p>
                     <div class="text-muted mt-2" style="font-size: 0.8rem;">
@@ -178,7 +165,6 @@
                         and pay our respects to their Elders past, present and emerging. We recognise their
                         continuing connection to land, waters and community.</em>
                     </div>
-
                     {% elif event.acknowledgement_type == 'enhanced' %}
                     {% if event.acknowledgement_text %}
                     <p class="card-text text-muted">{{ event.acknowledgement_text }}</p>
@@ -202,7 +188,6 @@
             <div class="card mb-5 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title mb-4">Comments</h5>
-
                     {% if event.comments %}
                     {% for comment in event.comments %}
                     <div class="border-bottom pb-3 mb-3">
@@ -216,8 +201,6 @@
                     {% else %}
                     <p class="text-muted small">No comments yet. Be the first!</p>
                     {% endif %}
-
-                    <!-- Add comment -->
                     <form method="POST" action="{{ url_for('home.add_comment', event_id=event.id) }}" class="mt-3">
                         {{ comment_form.hidden_tag() }}
                         <div class="mb-2">
