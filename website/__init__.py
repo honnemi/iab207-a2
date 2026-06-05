@@ -8,6 +8,7 @@ db = SQLAlchemy()
 def create_app():
 
     app = Flask(__name__)
+
     app.debug = True
     app.secret_key = 'somesecretkey'
 
@@ -32,5 +33,13 @@ def create_app():
     app.register_blueprint(bookings.bookings_bp)
     app.register_blueprint(auth.auth_bp)
     app.register_blueprint(about.about_bp)
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return "Page not found", 404
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return "Internal Server Error", 404
 
     return app
