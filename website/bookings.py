@@ -1,15 +1,16 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from . models import Booking
-
+from . models import Booking, Event
+from . import db
 bookings_bp = Blueprint('bookings', __name__)
 
-@bookings_bp.route('/bookings', methods = ['GET'])
+@bookings_bp.route('/bookings', methods=['GET'])
 @login_required
 def show_bookings():
     bookings = Booking.query.filter_by(
         user_id=current_user.id
-    ).all()
+    ).order_by(Booking.created_at.desc()).all()
+
     return render_template('booking_history.html', bookings=bookings)
 
 @bookings_bp.route('/order_confirmation/<int:booking_id>', methods = ['GET'])

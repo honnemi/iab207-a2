@@ -12,6 +12,14 @@ home_bp = Blueprint('home', __name__)
 
 @home_bp.route('/')
 def view_events():
+    bleh1 = Event.query.filter(Event.title.contains("2026")).first()
+
+    if bleh1:
+        db.session.delete(bleh1)
+        db.session.commit()
+
+
+
     genre_filter = request.args.get('genre')
     search_query = request.args.get('q', '').strip()
     query = Event.query
@@ -110,6 +118,10 @@ def buy_tickets(event_id):
         if action == "increase":
             if qty < event.tickets_available:
                 qty += 1
+                if qty == event.tickets_available:
+                    flash("Maximum available tickets selected.")
+            else:
+                flash("No more tickets are available.")
         elif action == "decrease":
             if qty > 1:
                 qty -= 1
@@ -145,8 +157,8 @@ def buy_tickets(event_id):
 @home_bp.route('/events/<int:event_id>/comment', methods=['POST'])
 def add_comment(event_id):
     if not current_user.is_authenticated:
-        flash("You must be logged in to comment", "warning")
-        return redirect(url_for('home.event_detail', event_id=event_id))
+        flash("You must be logged in to buy tickets", "warning")
+        return redirect(request.url)
     else:
         event = Event.query.get_or_404(event_id)
         text = request.form.get('text', '').strip()

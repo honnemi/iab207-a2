@@ -39,6 +39,10 @@
                 {% endif %}
                 {% if event.status == 'Cancelled' %}
                 <span class="badge bg-danger fs-6">Cancelled</span>
+                {% elif event.status == 'Sold Out' %}
+                <span class="badge bg-danger fs-6">Sold Out</span>
+                {% elif event.status == 'Inactive' %}
+                <span class="badge bg-danger fs-6">Inactive</span>
                 {% else %}
                 <span class="badge bg-success fs-6">Open</span>
                 {% endif %}
@@ -90,6 +94,10 @@
                         <div class="fw-semibold small">
                             {% if event.status == 'Cancelled' %}
                             <span class="text-danger">Cancelled</span>
+                            {% elif event.status == 'Sold Out' %}
+                            <span class="text-danger">Sold Out</span>
+                            {% elif event.status == 'Inactive' %}
+                            <span class="text-danger">Inactive</span>
                             {% else %}
                             <span style="color:#1db954;">Open</span>
                             {% endif %}
@@ -126,6 +134,10 @@
                         {% if event.status == 'Open' %}
                         <a href="{{ url_for('home.buy_tickets', event_id=event.id) }}"
                            class="btn btn-primary btn-lg">Buy Tickets</a>
+                        {% elif event.status == 'Sold Out' %}
+                        <button class="btn btn-danger btn-lg" disabled>Sold Out</button>
+                        {% elif event.status == 'Inactive' %}
+                        <button class="btn btn-danger btn-lg" disabled>Event Inactive</button>
                         {% else %}
                         <button class="btn btn-danger btn-lg" disabled>Event Cancelled</button>
                         {% endif %}

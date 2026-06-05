@@ -33,14 +33,21 @@ class Event(db.Model):
     acknowledgement_type = db.Column(db.String(20), default='none', nullable=False)
     acknowledgement_text = db.Column(db.Text, nullable=True)
 
-    comments = db.relationship('Comment', backref='event', lazy=True)
-    orders = db.relationship('Booking', backref='event', lazy=True)
+    comments = db.relationship('Comment', backref='event', cascade='all, delete-orphan', passive_deletes=True, lazy=True)
+    orders = db.relationship('Booking', backref='event', cascade='all, delete-orphan', passive_deletes=True, lazy=True)
 
     @property
     def status(self):
         if self.is_cancelled:
-            return 'Cancelled'
-        return 'Open'
+            return "Cancelled"
+        elif self.tickets_available == 0:
+            return "Sold Out"
+        elif self.date and self.date < datetime.now():
+            return "Inactive"
+        else:
+            return "Open"
+    
+
 
 class Comment(db.Model):
     __tablename__ = 'comment'
